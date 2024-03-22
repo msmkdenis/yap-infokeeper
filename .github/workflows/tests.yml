@@ -1,0 +1,41 @@
+name: tests
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+
+  golangci-lint:
+    name: lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v4
+        with:
+          go-version: '1.22'
+          check-latest: true
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v3.6.0
+        with:
+          version: v1.56.1
+
+  infokeeper-unit-tests:
+    runs-on: ubuntu-latest
+    container: golang:1.22
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Run tests
+        run: go test -race -tags fast -coverprofile unit.txt -covermode atomic ./...
+      - name: Upload coverage report to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./unit.txt
+          flags: unit
+          name: unit
+          token: ${{ secrets.CODECOV_TOKEN }}
