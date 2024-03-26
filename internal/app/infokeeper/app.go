@@ -13,11 +13,17 @@ import (
 	"google.golang.org/grpc/reflection"
 
 	"github.com/msmkdenis/yap-infokeeper/internal/config"
+	grpcCreditCardHandlers "github.com/msmkdenis/yap-infokeeper/internal/credit_card/api/grpchandlers"
+	pbCreditCard "github.com/msmkdenis/yap-infokeeper/internal/credit_card/api/grpchandlers/proto"
+	creditCardRepository "github.com/msmkdenis/yap-infokeeper/internal/credit_card/repository"
+	creditCardService "github.com/msmkdenis/yap-infokeeper/internal/credit_card/service"
+	"github.com/msmkdenis/yap-infokeeper/internal/interceptors"
 	"github.com/msmkdenis/yap-infokeeper/internal/storage/db"
-	"github.com/msmkdenis/yap-infokeeper/internal/user/api/grpchandlers"
-	pb "github.com/msmkdenis/yap-infokeeper/internal/user/api/grpchandlers/proto"
+	grpcUserHandlers "github.com/msmkdenis/yap-infokeeper/internal/user/api/grpchandlers"
+	pbUser "github.com/msmkdenis/yap-infokeeper/internal/user/api/grpchandlers/proto"
 	userRepository "github.com/msmkdenis/yap-infokeeper/internal/user/repository"
 	userService "github.com/msmkdenis/yap-infokeeper/internal/user/service"
+	"github.com/msmkdenis/yap-infokeeper/pkg/jwtgen"
 )
 
 func Run(quitSignal chan os.Signal) {
@@ -25,18 +31,29 @@ func Run(quitSignal chan os.Signal) {
 	slog.SetDefault(logger)
 	cfg := config.New()
 
+	jwtManager := jwtgen.NewJWTManager(cfg.TokenName, cfg.TokenSecret, cfg.TokenExpHours)
+	jwtAuth := interceptors.NewJWTAuth(jwtManager)
+
 	postgresPool := initPostgresPool(cfg)
 
 	userRepo := userRepository.NewPostgresUserRepository(postgresPool)
 	userServ := userService.NewUserService(userRepo)
+
+	creditCardRepo := creditCardRepository.NewPostgresCreditCardRepository(postgresPool)
+	creditCardServ := creditCardService.NewCreditCardService(creditCardRepo)
 
 	listener, err := net.Listen("tcp", cfg.GRPCServer)
 	if err != nil {
 		slog.Error("Unable to create listener", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
-	serverGrpc := grpc.NewServer()
-	pb.RegisterUserServiceServer(serverGrpc, grpchandlers.NewUserRegister(userServ))
+	serverGrpc := grpc.NewServer(
+		grpc.ChainUnaryInterceptor(jwtAuth.GRPCJWTAuth),
+	)
+
+	pbUser.RegisterUserServiceServer(serverGrpc, grpcUserHandlers.NewUserRegister(userServ, jwtManager))
+	pbCreditCard.RegisterCreditCardServiceServer(serverGrpc, grpcCreditCardHandlers.NewCreditCardHandler(creditCardServ))
+
 	reflection.Register(serverGrpc)
 
 	grpcServerCtx, grpcServerStopCtx := context.WithCancel(context.Background())
