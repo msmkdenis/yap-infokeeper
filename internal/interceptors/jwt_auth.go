@@ -18,7 +18,7 @@ var authMandatoryMethods = map[string]struct{}{
 
 type UserIDContextKey string
 
-// JWTAuth represents JWT authentication middleware.
+// JWTAuth represents JWT authentication interceptor.
 type JWTAuth struct {
 	jwtManager *jwtgen.JWTManager
 }
