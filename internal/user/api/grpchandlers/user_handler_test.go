@@ -2,6 +2,7 @@ package grpchandlers
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net"
 	"testing"
@@ -123,6 +124,21 @@ func (u *UserHandlerTestSuite) Test_PostRegisterUser() {
 			expectedViolationDescription: "is required",
 			prepare: func() {
 				u.userService.EXPECT().Register(gomock.Any(), gomock.Any()).Times(0)
+			},
+		},
+		{
+			name: "InternalError - failed to save user",
+			body: &pbUser.PostUserRegisterRequest{
+				Id:       "050a289a-d10a-417b-ab89-3acfca0f6529",
+				Login:    "msmkdenis@gmail.com",
+				Password: []byte("test"),
+			},
+			expectedCode:                 codes.Internal,
+			expectedStatusMessage:        "internal error",
+			expectedViolationField:       "",
+			expectedViolationDescription: "",
+			prepare: func() {
+				u.userService.EXPECT().Register(gomock.Any(), gomock.Any()).Times(1).Return(fmt.Errorf("failed to save user"))
 			},
 		},
 		{
