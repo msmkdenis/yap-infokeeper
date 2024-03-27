@@ -81,8 +81,12 @@ func (u *UserHandlerTestSuite) Test_PostRegisterUser() {
 		expectedResponse             *pbUser.PostUserRegisterResponse
 	}{
 		{
-			name:                         "BadRequest - invalid uuid",
-			body:                         &pbUser.PostUserRegisterRequest{Id: "non-uuid", Login: "msmkdenis@gmail.com", Password: []byte("test")},
+			name: "BadRequest - invalid uuid",
+			body: &pbUser.PostUserRegisterRequest{
+				Id:       "non-uuid",
+				Login:    "msmkdenis@gmail.com",
+				Password: []byte("test"),
+			},
 			expectedCode:                 codes.InvalidArgument,
 			expectedStatusMessage:        "invalid user request",
 			expectedViolationField:       "ID",
@@ -92,8 +96,12 @@ func (u *UserHandlerTestSuite) Test_PostRegisterUser() {
 			},
 		},
 		{
-			name:                         "BadRequest - invalid email",
-			body:                         &pbUser.PostUserRegisterRequest{Id: "050a289a-d10a-417b-ab89-3acfca0f6529", Login: "invalid-email", Password: []byte("test")},
+			name: "BadRequest - invalid email",
+			body: &pbUser.PostUserRegisterRequest{
+				Id:       "050a289a-d10a-417b-ab89-3acfca0f6529",
+				Login:    "invalid-email",
+				Password: []byte("test"),
+			},
 			expectedCode:                 codes.InvalidArgument,
 			expectedStatusMessage:        "invalid user request",
 			expectedViolationField:       "Login",
@@ -103,8 +111,12 @@ func (u *UserHandlerTestSuite) Test_PostRegisterUser() {
 			},
 		},
 		{
-			name:                         "BadRequest - zero length password",
-			body:                         &pbUser.PostUserRegisterRequest{Id: "050a289a-d10a-417b-ab89-3acfca0f6529", Login: "msmkdenis@gmail.com", Password: []byte("")},
+			name: "BadRequest - zero length password",
+			body: &pbUser.PostUserRegisterRequest{
+				Id:       "050a289a-d10a-417b-ab89-3acfca0f6529",
+				Login:    "msmkdenis@gmail.com",
+				Password: []byte(""),
+			},
 			expectedCode:                 codes.InvalidArgument,
 			expectedStatusMessage:        "invalid user request",
 			expectedViolationField:       "Password",
@@ -114,24 +126,30 @@ func (u *UserHandlerTestSuite) Test_PostRegisterUser() {
 			},
 		},
 		{
-			name:                         "Successful registration",
-			body:                         &pbUser.PostUserRegisterRequest{Id: "050a289a-d10a-417b-ab89-3acfca0f6529", Login: "msmkdenis@gmail.com", Password: []byte("test")},
+			name: "Successful registration",
+			body: &pbUser.PostUserRegisterRequest{
+				Id:       "050a289a-d10a-417b-ab89-3acfca0f6529",
+				Login:    "msmkdenis@gmail.com",
+				Password: []byte("test"),
+			},
 			expectedCode:                 codes.OK,
 			expectedStatusMessage:        "",
 			expectedViolationField:       "",
 			expectedViolationDescription: "",
 			expectedToken:                token,
 			prepare: func() {
-				u.userService.EXPECT().Register(gomock.Any(), model.User{ID: "050a289a-d10a-417b-ab89-3acfca0f6529", Login: "msmkdenis@gmail.com", Password: []byte("test")}).Times(1).Return(nil)
+				u.userService.EXPECT().Register(gomock.Any(), model.User{
+					ID:       "050a289a-d10a-417b-ab89-3acfca0f6529",
+					Login:    "msmkdenis@gmail.com",
+					Password: []byte("test"),
+				}).Times(1).Return(nil)
 			},
 		},
 	}
 
 	for _, test := range testCases {
 		u.T().Run(test.name, func(t *testing.T) {
-			if test.prepare != nil {
-				test.prepare()
-			}
+			test.prepare()
 
 			ctx := context.Background()
 			conn, _ := grpc.DialContext(ctx, "bufnet",

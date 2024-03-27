@@ -8,10 +8,9 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/msmkdenis/yap-infokeeper/internal/interceptors"
-
 	pb "github.com/msmkdenis/yap-infokeeper/internal/credit_card/api/grpchandlers/proto"
 	"github.com/msmkdenis/yap-infokeeper/internal/credit_card/model"
+	"github.com/msmkdenis/yap-infokeeper/internal/interceptors"
 )
 
 type CreditCardService interface {
