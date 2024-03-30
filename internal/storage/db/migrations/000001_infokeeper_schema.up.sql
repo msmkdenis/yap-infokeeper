@@ -20,6 +20,7 @@ create table if not exists infokeeper.credit_card
     cvv_code                text not null,
     pin_code                text not null,
     created_at              timestamp not null default now(),
+    metadata                text,
     constraint pk_credit_card primary key (id),
     constraint fk_owner_id foreign key (owner_id) references infokeeper.user (id)
 );

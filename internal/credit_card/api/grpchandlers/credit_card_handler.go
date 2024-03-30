@@ -5,11 +5,12 @@ import (
 	"log/slog"
 	"time"
 
+	"github.com/msmkdenis/yap-infokeeper/internal/model"
+
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
 	pb "github.com/msmkdenis/yap-infokeeper/internal/credit_card/api/grpchandlers/proto"
-	"github.com/msmkdenis/yap-infokeeper/internal/credit_card/model"
 	"github.com/msmkdenis/yap-infokeeper/internal/interceptors"
 )
 
@@ -45,6 +46,7 @@ func (h *UserRegister) PostSaveCreditCard(ctx context.Context, in *pb.PostCredit
 		ExpiresAt: expire,
 		CVVCode:   in.CvvCode,
 		PinCode:   in.PinCode,
+		Metadata:  in.Metadata,
 	}
 
 	err = h.creditCardService.Save(ctx, userID, card)

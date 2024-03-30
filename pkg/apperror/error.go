@@ -2,10 +2,28 @@
 package apperr
 
 import (
+	"errors"
 	"fmt"
 	"path"
 	"path/filepath"
 	"runtime"
+)
+
+var (
+	ErrLoginAlreadyExists              = errors.New("login already exists")
+	ErrUserNotFound                    = errors.New("user not found")
+	ErrInvalidPassword                 = errors.New("invalid password")
+	ErrUnableToGetUserLoginFromContext = errors.New("unable to get user login from context")
+	ErrEmptyOrderRequest               = errors.New("empty order")
+	ErrOrderUploadedByAnotherUser      = errors.New("order uploaded by another user")
+	ErrOrderUploadedByUser             = errors.New("order uploaded by User")
+	ErrOrderNotFound                   = errors.New("order not found")
+	ErrBadNumber                       = errors.New("bad number")
+	ErrNoOrders                        = errors.New("no orders")
+	ErrRateLimit                       = errors.New("rate limit")
+	ErrBalanceNotFound                 = errors.New("balance not found")
+	ErrInsufficientFunds               = errors.New("insufficient funds")
+	ErrNoWithdrawals                   = errors.New("no withdrawals")
 )
 
 // ValueError is an error that represents a value error.

@@ -6,10 +6,10 @@ package mocks
 
 import (
 	context "context"
+	"github.com/msmkdenis/yap-infokeeper/internal/model"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
-	model "github.com/msmkdenis/yap-infokeeper/internal/user/model"
 )
 
 // MockUserRepository is a mock of UserRepository interface.

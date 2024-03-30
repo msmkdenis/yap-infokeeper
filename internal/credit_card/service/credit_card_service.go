@@ -4,7 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/msmkdenis/yap-infokeeper/internal/credit_card/model"
+	"github.com/msmkdenis/yap-infokeeper/internal/model"
+
 	apperr "github.com/msmkdenis/yap-infokeeper/pkg/apperror"
 )
 

@@ -5,7 +5,7 @@ import (
 	_ "embed"
 	"errors"
 
-	"github.com/msmkdenis/yap-infokeeper/internal/credit_card/model"
+	"github.com/msmkdenis/yap-infokeeper/internal/model"
 
 	"github.com/jackc/pgerrcode"
 	"github.com/jackc/pgx/v5/pgconn"
@@ -27,7 +27,7 @@ func NewPostgresCreditCardRepository(postgresPool *db.PostgresPool) *PostgresCre
 
 func (r *PostgresCreditCardRepository) Insert(ctx context.Context, ownerID string, card model.CreditCard) error {
 	_, err := r.postgresPool.DB.Exec(ctx, insertCreditCard, card.ID, card.Number, card.Owner,
-		card.ExpiresAt, card.CVVCode, card.PinCode)
+		card.ExpiresAt, card.CVVCode, card.PinCode, card.Metadata)
 
 	var e *pgconn.PgError
 	if errors.As(err, &e) && e.Code == pgerrcode.UniqueViolation {

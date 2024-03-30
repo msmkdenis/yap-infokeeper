@@ -10,6 +10,7 @@ message PostCreditCardCredentialsRequest {
   string expires_at = 3;
   string cvv_code = 4;
   string pin_code = 5;
+  string metadata = 6;
 }
 
 message PostCreditCardCredentialsResponse {}

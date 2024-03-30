@@ -4,13 +4,15 @@ import (
 	"context"
 	"fmt"
 
-	apperr "github.com/msmkdenis/yap-infokeeper/pkg/apperror"
+	"golang.org/x/crypto/bcrypt"
 
-	"github.com/msmkdenis/yap-infokeeper/internal/user/model"
+	"github.com/msmkdenis/yap-infokeeper/internal/model"
+	apperr "github.com/msmkdenis/yap-infokeeper/pkg/apperror"
 )
 
 type UserRepository interface {
 	Insert(ctx context.Context, user model.User) error
+	SelectByLogin(ctx context.Context, login string) (*model.User, error)
 }
 
 type UserUseCase struct {
@@ -27,4 +29,17 @@ func (u *UserUseCase) Register(ctx context.Context, user model.User) error {
 	}
 
 	return nil
+}
+
+func (u *UserUseCase) Login(ctx context.Context, userLoginRequest model.UserLoginRequest) (*model.User, error) {
+	user, err := u.repository.SelectByLogin(ctx, userLoginRequest.Login)
+	if err != nil {
+		return nil, fmt.Errorf("%s %w", apperr.Caller(), err)
+	}
+
+	if errPass := bcrypt.CompareHashAndPassword(user.Password, userLoginRequest.Password); errPass != nil {
+		return nil, apperr.ErrInvalidPassword
+	}
+
+	return user, nil
 }

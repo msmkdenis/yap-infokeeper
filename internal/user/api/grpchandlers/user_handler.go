@@ -5,57 +5,35 @@ import (
 	"log/slog"
 	"strings"
 
+	"github.com/msmkdenis/yap-infokeeper/internal/model"
+
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
 	pb "github.com/msmkdenis/yap-infokeeper/internal/user/api/grpchandlers/proto"
-	"github.com/msmkdenis/yap-infokeeper/internal/user/model"
 	"github.com/msmkdenis/yap-infokeeper/pkg/jwtgen"
 )
 
 type UserService interface {
 	Register(ctx context.Context, user model.User) error
+	Login(ctx context.Context, user model.UserLoginRequest) (*model.User, error)
 }
 
 type UserRegister struct {
 	userService UserService
 	jwtManager  *jwtgen.JWTManager
 	pb.UnimplementedUserServiceServer
+	validator *model.UserRequestValidator
 }
 
 func NewUserRegister(service UserService, jwtManager *jwtgen.JWTManager) *UserRegister {
+	validator := model.NewUserRequestValidator()
 	return &UserRegister{
 		userService: service,
 		jwtManager:  jwtManager,
+		validator:   validator,
 	}
-}
-
-func (h *UserRegister) PostRegisterUser(ctx context.Context, in *pb.PostUserRegisterRequest) (*pb.PostUserRegisterResponse, error) {
-	user := model.User{
-		ID:       in.Id,
-		Login:    in.Login,
-		Password: in.Password,
-	}
-
-	validator := model.NewUserRequestValidator()
-	report, ok := validator.Validate(user)
-	if !ok {
-		return nil, processValidationError(report)
-	}
-
-	err := h.userService.Register(ctx, user)
-	if err != nil {
-		return nil, status.Error(codes.Internal, "internal error")
-	}
-
-	token, err := h.jwtManager.BuildJWTString(user.ID)
-	if err != nil {
-		slog.Error("failed to build token", slog.String("error", err.Error()))
-		return nil, status.Error(codes.Internal, "internal error")
-	}
-
-	return &pb.PostUserRegisterResponse{Token: token}, nil
 }
 
 func processValidationError(report map[string][]string) error {
