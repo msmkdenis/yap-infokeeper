@@ -1,10 +1,9 @@
 package service
 
 import (
+	"bytes"
 	"context"
 	"fmt"
-
-	"golang.org/x/crypto/bcrypt"
 
 	"github.com/msmkdenis/yap-infokeeper/internal/model"
 	apperr "github.com/msmkdenis/yap-infokeeper/pkg/apperror"
@@ -37,7 +36,7 @@ func (u *UserUseCase) Login(ctx context.Context, userLoginRequest model.UserLogi
 		return nil, fmt.Errorf("%s %w", apperr.Caller(), err)
 	}
 
-	if errPass := bcrypt.CompareHashAndPassword(user.Password, userLoginRequest.Password); errPass != nil {
+	if !bytes.Equal(userLoginRequest.Password, user.Password) {
 		return nil, apperr.ErrInvalidPassword
 	}
 

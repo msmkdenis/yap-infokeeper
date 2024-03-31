@@ -41,7 +41,7 @@ func (r *PostgresUserRepository) Insert(ctx context.Context, user model.User) er
 
 func (r *PostgresUserRepository) SelectByLogin(ctx context.Context, login string) (*model.User, error) {
 	var user model.User
-	err := r.postgresPool.DB.QueryRow(ctx, selectUser, login).Scan(&user.ID, &user.Login, &user.Password)
+	err := r.postgresPool.DB.QueryRow(ctx, selectUser, login).Scan(&user.ID, &user.Login, &user.Password, &user.CreatedAt)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
 			err = apperr.ErrUserNotFound
