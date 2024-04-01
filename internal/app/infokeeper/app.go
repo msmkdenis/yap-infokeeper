@@ -13,6 +13,10 @@ import (
 	"google.golang.org/grpc/reflection"
 
 	"github.com/msmkdenis/yap-infokeeper/internal/config"
+	grpcCredentialHandlers "github.com/msmkdenis/yap-infokeeper/internal/credential/api/grpchandlers"
+	pbCredential "github.com/msmkdenis/yap-infokeeper/internal/credential/api/grpchandlers/proto"
+	credentialRepository "github.com/msmkdenis/yap-infokeeper/internal/credential/repository"
+	credentialService "github.com/msmkdenis/yap-infokeeper/internal/credential/service"
 	grpcCreditCardHandlers "github.com/msmkdenis/yap-infokeeper/internal/credit_card/api/grpchandlers"
 	pbCreditCard "github.com/msmkdenis/yap-infokeeper/internal/credit_card/api/grpchandlers/proto"
 	creditCardRepository "github.com/msmkdenis/yap-infokeeper/internal/credit_card/repository"
@@ -42,6 +46,9 @@ func Run(quitSignal chan os.Signal) {
 	creditCardRepo := creditCardRepository.NewPostgresCreditCardRepository(postgresPool)
 	creditCardServ := creditCardService.NewCreditCardService(creditCardRepo)
 
+	credentialRepo := credentialRepository.NewPostgresCredentialsRepository(postgresPool)
+	credentialServ := credentialService.NewCredentialService(credentialRepo)
+
 	listener, err := net.Listen("tcp", cfg.GRPCServer)
 	if err != nil {
 		slog.Error("Unable to create listener", slog.String("error", err.Error()))
@@ -53,6 +60,7 @@ func Run(quitSignal chan os.Signal) {
 
 	pbUser.RegisterUserServiceServer(serverGrpc, grpcUserHandlers.NewUserRegister(userServ, jwtManager))
 	pbCreditCard.RegisterCreditCardServiceServer(serverGrpc, grpcCreditCardHandlers.NewCreditCard(creditCardServ))
+	pbCredential.RegisterCredentialServiceServer(serverGrpc, grpcCredentialHandlers.NewCredential(credentialServ))
 
 	reflection.Register(serverGrpc)
 

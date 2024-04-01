@@ -45,12 +45,12 @@ func (h *CreditCard) PostSaveCreditCard(ctx context.Context, in *pb.PostCreditCa
 
 	err = h.creditCardService.Save(ctx, card)
 	if errors.Is(err, apperr.ErrCardAlreadyExists) {
-		slog.Info("Credit card already exists", slog.String("with number", in.Number))
+		slog.Info("Credit card already exists", slog.String("error", err.Error()))
 		return nil, status.Error(codes.InvalidArgument, "card with given number already exists")
 	}
 
 	if err != nil {
-		slog.Info("Unable to save credit card", slog.String("with number", in.Number))
+		slog.Info("Unable to save credit card", slog.String("error", err.Error()))
 		return nil, status.Error(codes.Internal, "internal error while saving credit card")
 	}
 

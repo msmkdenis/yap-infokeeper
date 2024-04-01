@@ -27,4 +27,16 @@ create table if not exists infokeeper.credit_card
     constraint unique_number unique (number)
 );
 
+create table if not exists infokeeper.credentials
+(
+    id                      text,
+    owner_id                text not null,
+    login                   text not null,
+    password                text not null,
+    created_at              timestamp not null default now(),
+    metadata                text,
+    constraint pk_credentials primary key (id),
+    constraint fk_owner_id foreign key (owner_id) references infokeeper.user (id)
+);
+
 commit transaction;
