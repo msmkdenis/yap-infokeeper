@@ -31,7 +31,6 @@ func (c *CreditCardHandlerTestSuite) Test_PostSaveCreditCard() {
 		expectedViolationField       string
 		expectedViolationDescription string
 		prepare                      func()
-		expectedToken                string
 	}{
 		{
 			name:  "BadRequest - invalid uuid",
@@ -132,7 +131,7 @@ func (c *CreditCardHandlerTestSuite) Test_PostSaveCreditCard() {
 			},
 		},
 		{
-			name:  "Unauthorized - token not found ",
+			name:  "Unauthorized - token not found",
 			token: "",
 			body: &pbCreditCard.PostCreditCardCredentialsRequest{
 				Uuid:      "050a289a-d10a-417b-ab89-3acfca0f6529",

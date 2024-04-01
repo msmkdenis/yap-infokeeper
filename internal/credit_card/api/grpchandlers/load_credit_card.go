@@ -2,7 +2,10 @@ package grpchandlers
 
 import (
 	"context"
+	"errors"
 	"log/slog"
+
+	apperr "github.com/msmkdenis/yap-infokeeper/pkg/apperror"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -18,7 +21,7 @@ func (h *CreditCard) GetLoadCreditCard(ctx context.Context, in *pb.GetCreditCard
 		return nil, status.Error(codes.Internal, "internal error")
 	}
 
-	var creditCardCredentials []*pb.CreditCardCredentials
+	creditCardCredentials := make([]*pb.CreditCardCredentials, 0)
 	if len(in.CardNumber) == 0 {
 		cards, err := h.creditCardService.SelectAllByOwnerID(ctx, userID)
 		if err != nil {
@@ -37,6 +40,10 @@ func (h *CreditCard) GetLoadCreditCard(ctx context.Context, in *pb.GetCreditCard
 		}
 	} else {
 		card, err := h.creditCardService.SelectByOwnerIDCardNumber(ctx, userID, in.CardNumber)
+		if err != nil && errors.Is(err, apperr.ErrCardNotFound) {
+			slog.Info("Credit card not found", slog.String("with number", in.CardNumber))
+			return &pb.GetCreditCardResponse{Cards: creditCardCredentials}, nil
+		}
 		if err != nil {
 			slog.Error("Internal server error", slog.String("error", err.Error()))
 			return nil, status.Error(codes.Internal, "internal error")
