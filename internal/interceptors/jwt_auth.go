@@ -14,6 +14,7 @@ import (
 
 var authMandatoryMethods = map[string]struct{}{
 	"/proto.CreditCardService/PostSaveCreditCard": {},
+	"/proto.CreditCardService/GetLoadCreditCard":  {},
 }
 
 type UserIDContextKey string

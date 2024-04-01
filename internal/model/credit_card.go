@@ -18,6 +18,7 @@ type CreditCard struct {
 	ExpiresAt time.Time `db:"expires_at"`
 	CVVCode   string    `db:"cvv_code" validate:"cvv"`
 	PinCode   string    `db:"pin_code" validate:"pin"`
+	CreatedAt time.Time `db:"created_at"`
 	Metadata  string    `db:"metadata"`
 }
 

@@ -48,3 +48,33 @@ func (mr *MockCreditCardRepositoryMockRecorder) Insert(arg0, arg1 interface{}) *
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Insert", reflect.TypeOf((*MockCreditCardRepository)(nil).Insert), arg0, arg1)
 }
+
+// SelectAllByOwnerID mocks base method.
+func (m *MockCreditCardRepository) SelectAllByOwnerID(arg0 context.Context, arg1 string) ([]model.CreditCard, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SelectAllByOwnerID", arg0, arg1)
+	ret0, _ := ret[0].([]model.CreditCard)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// SelectAllByOwnerID indicates an expected call of SelectAllByOwnerID.
+func (mr *MockCreditCardRepositoryMockRecorder) SelectAllByOwnerID(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SelectAllByOwnerID", reflect.TypeOf((*MockCreditCardRepository)(nil).SelectAllByOwnerID), arg0, arg1)
+}
+
+// SelectByOwnerIDCardNumber mocks base method.
+func (m *MockCreditCardRepository) SelectByOwnerIDCardNumber(arg0 context.Context, arg1, arg2 string) (*model.CreditCard, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SelectByOwnerIDCardNumber", arg0, arg1, arg2)
+	ret0, _ := ret[0].(*model.CreditCard)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// SelectByOwnerIDCardNumber indicates an expected call of SelectByOwnerIDCardNumber.
+func (mr *MockCreditCardRepositoryMockRecorder) SelectByOwnerIDCardNumber(arg0, arg1, arg2 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SelectByOwnerIDCardNumber", reflect.TypeOf((*MockCreditCardRepository)(nil).SelectByOwnerIDCardNumber), arg0, arg1, arg2)
+}

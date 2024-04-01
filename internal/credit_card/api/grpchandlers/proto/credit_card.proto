@@ -16,6 +16,24 @@ message PostCreditCardCredentialsRequest {
 
 message PostCreditCardCredentialsResponse {}
 
+message CreditCardCredentials {
+  string number = 1;
+  string owner = 2;
+  string expires_at = 3;
+  string cvv_code = 4;
+  string pin_code = 5;
+  string metadata = 6;
+}
+
+message GetCreditCardRequest {
+  string card_number = 1;
+}
+
+message GetCreditCardResponse {
+  repeated CreditCardCredentials cards = 1;
+}
+
 service CreditCardService {
   rpc PostSaveCreditCard(PostCreditCardCredentialsRequest) returns (PostCreditCardCredentialsResponse);
+  rpc GetLoadCreditCard(GetCreditCardRequest) returns (GetCreditCardResponse);
 }

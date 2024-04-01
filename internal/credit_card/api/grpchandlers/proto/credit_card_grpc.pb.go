@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 
 const (
 	CreditCardService_PostSaveCreditCard_FullMethodName = "/proto.CreditCardService/PostSaveCreditCard"
+	CreditCardService_GetLoadCreditCard_FullMethodName  = "/proto.CreditCardService/GetLoadCreditCard"
 )
 
 // CreditCardServiceClient is the client API for CreditCardService service.
@@ -27,6 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CreditCardServiceClient interface {
 	PostSaveCreditCard(ctx context.Context, in *PostCreditCardCredentialsRequest, opts ...grpc.CallOption) (*PostCreditCardCredentialsResponse, error)
+	GetLoadCreditCard(ctx context.Context, in *GetCreditCardRequest, opts ...grpc.CallOption) (*GetCreditCardResponse, error)
 }
 
 type creditCardServiceClient struct {
@@ -46,11 +48,21 @@ func (c *creditCardServiceClient) PostSaveCreditCard(ctx context.Context, in *Po
 	return out, nil
 }
 
+func (c *creditCardServiceClient) GetLoadCreditCard(ctx context.Context, in *GetCreditCardRequest, opts ...grpc.CallOption) (*GetCreditCardResponse, error) {
+	out := new(GetCreditCardResponse)
+	err := c.cc.Invoke(ctx, CreditCardService_GetLoadCreditCard_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CreditCardServiceServer is the server API for CreditCardService service.
 // All implementations must embed UnimplementedCreditCardServiceServer
 // for forward compatibility
 type CreditCardServiceServer interface {
 	PostSaveCreditCard(context.Context, *PostCreditCardCredentialsRequest) (*PostCreditCardCredentialsResponse, error)
+	GetLoadCreditCard(context.Context, *GetCreditCardRequest) (*GetCreditCardResponse, error)
 	mustEmbedUnimplementedCreditCardServiceServer()
 }
 
@@ -60,6 +72,9 @@ type UnimplementedCreditCardServiceServer struct {
 
 func (UnimplementedCreditCardServiceServer) PostSaveCreditCard(context.Context, *PostCreditCardCredentialsRequest) (*PostCreditCardCredentialsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PostSaveCreditCard not implemented")
+}
+func (UnimplementedCreditCardServiceServer) GetLoadCreditCard(context.Context, *GetCreditCardRequest) (*GetCreditCardResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetLoadCreditCard not implemented")
 }
 func (UnimplementedCreditCardServiceServer) mustEmbedUnimplementedCreditCardServiceServer() {}
 
@@ -92,6 +107,24 @@ func _CreditCardService_PostSaveCreditCard_Handler(srv interface{}, ctx context.
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CreditCardService_GetLoadCreditCard_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCreditCardRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CreditCardServiceServer).GetLoadCreditCard(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CreditCardService_GetLoadCreditCard_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CreditCardServiceServer).GetLoadCreditCard(ctx, req.(*GetCreditCardRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // CreditCardService_ServiceDesc is the grpc.ServiceDesc for CreditCardService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -102,6 +135,10 @@ var CreditCardService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "PostSaveCreditCard",
 			Handler:    _CreditCardService_PostSaveCreditCard_Handler,
+		},
+		{
+			MethodName: "GetLoadCreditCard",
+			Handler:    _CreditCardService_GetLoadCreditCard_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
