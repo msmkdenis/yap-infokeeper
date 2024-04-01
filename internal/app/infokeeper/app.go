@@ -52,7 +52,7 @@ func Run(quitSignal chan os.Signal) {
 	)
 
 	pbUser.RegisterUserServiceServer(serverGrpc, grpcUserHandlers.NewUserRegister(userServ, jwtManager))
-	pbCreditCard.RegisterCreditCardServiceServer(serverGrpc, grpcCreditCardHandlers.NewCreditCardHandler(creditCardServ))
+	pbCreditCard.RegisterCreditCardServiceServer(serverGrpc, grpcCreditCardHandlers.NewCreditCard(creditCardServ))
 
 	reflection.Register(serverGrpc)
 

@@ -3,56 +3,55 @@ package grpchandlers
 import (
 	"context"
 	"log/slog"
-	"time"
+	"strings"
 
-	"github.com/msmkdenis/yap-infokeeper/internal/model"
-
+	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
 	pb "github.com/msmkdenis/yap-infokeeper/internal/credit_card/api/grpchandlers/proto"
-	"github.com/msmkdenis/yap-infokeeper/internal/interceptors"
+	"github.com/msmkdenis/yap-infokeeper/internal/model"
 )
 
+// mockgen --build_flags=--mod=mod -destination=internal/credit_card/mocks/mock_credit_card_service.go -package=mocks github.com/msmkdenis/yap-infokeeper/internal/credit_card/api/grpchandlers CreditCardService
 type CreditCardService interface {
-	Save(ctx context.Context, ownerID string, card model.CreditCard) error
+	Save(ctx context.Context, card model.CreditCard) error
 }
 
-type UserRegister struct {
+type CreditCard struct {
 	creditCardService CreditCardService
 	pb.UnimplementedCreditCardServiceServer
+	validator *model.CreditCardRequestValidator
 }
 
-func NewCreditCardHandler(creditCardService CreditCardService) *UserRegister {
-	return &UserRegister{creditCardService: creditCardService}
+func NewCreditCard(creditCardService CreditCardService) *CreditCard {
+	validator := model.NewCreditCardRequestValidator()
+	return &CreditCard{
+		creditCardService: creditCardService,
+		validator:         validator,
+	}
 }
 
-func (h *UserRegister) PostSaveCreditCard(ctx context.Context, in *pb.PostCreditCardCredentialsRequest) (*pb.PostCreditCardCredentialsResponse, error) {
-	userID, ok := ctx.Value(interceptors.UserIDContextKey("userID")).(string)
-	if !ok {
-		slog.Error("Internal server error", slog.String("error", "unable to get userID from context"))
-		return nil, status.Error(codes.Internal, "internal error")
+func processValidationError(report map[string][]string) error {
+	st := status.New(codes.InvalidArgument, "invalid credit card request")
+	details := make([]*errdetails.BadRequest_FieldViolation, 0, len(report))
+	for field, messages := range report {
+		var description strings.Builder
+		for _, message := range messages {
+			description.WriteString(message)
+		}
+		details = append(details, &errdetails.BadRequest_FieldViolation{
+			Field:       field,
+			Description: description.String(),
+		})
 	}
-
-	expire, err := time.Parse("2006-01-02", in.ExpiresAt)
+	br := &errdetails.BadRequest{}
+	br.FieldViolations = append(br.FieldViolations, details...)
+	st, err := st.WithDetails(br)
 	if err != nil {
-		return nil, status.Error(codes.InvalidArgument, "date format must be 'YYYY-DD-MM'")
+		slog.Error("failed to set details", slog.String("error", err.Error()))
+		return status.Error(codes.Internal, "internal error")
 	}
-
-	card := model.CreditCard{
-		ID:        in.Uuid,
-		Number:    in.Number,
-		Owner:     userID,
-		ExpiresAt: expire,
-		CVVCode:   in.CvvCode,
-		PinCode:   in.PinCode,
-		Metadata:  in.Metadata,
-	}
-
-	err = h.creditCardService.Save(ctx, userID, card)
-	if err != nil {
-		return nil, err
-	}
-
-	return &pb.PostCreditCardCredentialsResponse{}, nil
+	slog.Info("validation error", slog.String("error", st.Err().Error()))
+	return st.Err()
 }

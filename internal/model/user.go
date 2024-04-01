@@ -29,8 +29,8 @@ type UserRequestValidator struct {
 }
 
 func NewUserRequestValidator() *UserRequestValidator {
-	validate := validator.New()
-	return &UserRequestValidator{validator: validate}
+	v := validator.New()
+	return &UserRequestValidator{validator: v}
 }
 
 func (v *UserRequestValidator) ValidateUser(request User) (map[string][]string, bool) {

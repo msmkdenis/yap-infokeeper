@@ -11,6 +11,7 @@ import (
 
 var (
 	ErrLoginAlreadyExists              = errors.New("login already exists")
+	ErrCardAlreadyExists               = errors.New("card with this number already exists")
 	ErrUserNotFound                    = errors.New("user not found")
 	ErrInvalidPassword                 = errors.New("invalid password")
 	ErrUnableToGetUserLoginFromContext = errors.New("unable to get user login from context")
