@@ -5,23 +5,21 @@ import (
 	"fmt"
 	"time"
 
-	pb "github.com/msmkdenis/yap-infokeeper/internal/credential/api/grpchandlers/proto"
+	pb "github.com/msmkdenis/yap-infokeeper/internal/text_data/api/grpchandlers/proto"
 )
 
-type CredentialSpecification struct {
+type TextDataSpecification struct {
 	OwnerID       string
-	Login         string
-	Password      string
+	Data          string
 	Metadata      string
 	CreatedAfter  time.Time
 	CreatedBefore time.Time
 }
 
-func NewCredentialSpecification(ownerID string, in *pb.GetCredentialRequest) (*CredentialSpecification, error) {
-	spec := &CredentialSpecification{
+func NewTextDataSpecification(ownerID string, in *pb.GetTextDataRequest) (*TextDataSpecification, error) {
+	spec := &TextDataSpecification{
 		OwnerID:  ownerID,
-		Login:    in.Login,
-		Password: in.Password,
+		Data:     in.Data,
 		Metadata: in.Metadata,
 	}
 
@@ -44,31 +42,27 @@ func NewCredentialSpecification(ownerID string, in *pb.GetCredentialRequest) (*C
 	return spec, nil
 }
 
-func (c *CredentialSpecification) GetQueryArgs(query string) (string, []interface{}) {
+func (t *TextDataSpecification) GetQueryArgs(query string) (string, []interface{}) {
 	var args []interface{}
 	whereCondition := make([]string, 0)
 	query += " where "
 	whereCondition = append(whereCondition, "owner_id = $")
-	args = append(args, c.OwnerID)
-	if c.Login != "" {
-		whereCondition = append(whereCondition, "login ilike $")
-		args = append(args, fmt.Sprintf("%%%s%%", c.Login))
+	args = append(args, t.OwnerID)
+	if t.Data != "" {
+		whereCondition = append(whereCondition, "data ilike $")
+		args = append(args, fmt.Sprintf("%%%s%%", t.Data))
 	}
-	if c.Password != "" {
-		whereCondition = append(whereCondition, "password ilike $")
-		args = append(args, fmt.Sprintf("%%%s%%", c.Password))
-	}
-	if c.Metadata != "" {
+	if t.Metadata != "" {
 		whereCondition = append(whereCondition, "metadata ilike $")
-		args = append(args, fmt.Sprintf("%%%s%%", c.Metadata))
+		args = append(args, fmt.Sprintf("%%%s%%", t.Metadata))
 	}
-	if !c.CreatedAfter.IsZero() {
+	if !t.CreatedAfter.IsZero() {
 		whereCondition = append(whereCondition, "created_at >= $")
-		args = append(args, c.CreatedAfter)
+		args = append(args, t.CreatedAfter)
 	}
-	if !c.CreatedBefore.IsZero() {
+	if !t.CreatedBefore.IsZero() {
 		whereCondition = append(whereCondition, "created_at <= $")
-		args = append(args, c.CreatedBefore)
+		args = append(args, t.CreatedBefore)
 	}
 
 	var counter int

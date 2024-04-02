@@ -39,4 +39,15 @@ create table if not exists infokeeper.credentials
     constraint fk_owner_id foreign key (owner_id) references infokeeper.user (id)
 );
 
+create table if not exists infokeeper.text_data
+(
+    id                      text,
+    owner_id                text not null,
+    data                    text not null,
+    created_at              timestamp not null default now(),
+    metadata                text,
+    constraint pk_text_data primary key (id),
+    constraint fk_owner_id foreign key (owner_id) references infokeeper.user (id)
+);
+
 commit transaction;

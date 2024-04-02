@@ -51,7 +51,5 @@ func (r *PostgresCredentialsRepository) SelectAll(ctx context.Context, spec *spe
 		return nil, err
 	}
 
-	fmt.Println(credentials)
-
 	return credentials, nil
 }

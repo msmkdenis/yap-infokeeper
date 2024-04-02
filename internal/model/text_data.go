@@ -6,25 +6,24 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-type Credential struct {
+type TextData struct {
 	ID        string    `db:"id" validate:"uuid"`
 	OwnerID   string    `db:"owner_id" validate:"uuid"`
-	Login     string    `db:"login" validate:"required"`
-	Password  string    `db:"password" validate:"required"`
+	Data      string    `db:"data" validate:"required"`
 	CreatedAt time.Time `db:"created_at"`
 	Metadata  string    `db:"metadata"`
 }
 
-type CredentialValidator struct {
+type TextDataValidator struct {
 	validator *validator.Validate
 }
 
-func NewCredentialValidator() *CredentialValidator {
+func NewTextDataValidator() *TextDataValidator {
 	v := validator.New()
-	return &CredentialValidator{validator: v}
+	return &TextDataValidator{validator: v}
 }
 
-func (v *CredentialValidator) ValidateCredential(request Credential) (map[string][]string, bool) {
+func (v *TextDataValidator) ValidateTextData(request TextData) (map[string][]string, bool) {
 	err := v.validator.Struct(request)
 	report := make(map[string][]string)
 	if err != nil {

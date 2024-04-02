@@ -23,6 +23,10 @@ import (
 	creditCardService "github.com/msmkdenis/yap-infokeeper/internal/credit_card/service"
 	"github.com/msmkdenis/yap-infokeeper/internal/interceptors"
 	"github.com/msmkdenis/yap-infokeeper/internal/storage/db"
+	grpcTextDataHandlers "github.com/msmkdenis/yap-infokeeper/internal/text_data/api/grpchandlers"
+	pbTextData "github.com/msmkdenis/yap-infokeeper/internal/text_data/api/grpchandlers/proto"
+	textDataRepository "github.com/msmkdenis/yap-infokeeper/internal/text_data/repository"
+	textDataService "github.com/msmkdenis/yap-infokeeper/internal/text_data/service"
 	grpcUserHandlers "github.com/msmkdenis/yap-infokeeper/internal/user/api/grpchandlers"
 	pbUser "github.com/msmkdenis/yap-infokeeper/internal/user/api/grpchandlers/proto"
 	userRepository "github.com/msmkdenis/yap-infokeeper/internal/user/repository"
@@ -49,6 +53,9 @@ func Run(quitSignal chan os.Signal) {
 	credentialRepo := credentialRepository.NewPostgresCredentialsRepository(postgresPool)
 	credentialServ := credentialService.NewCredentialService(credentialRepo)
 
+	textDataRepo := textDataRepository.NewPostgresTextDataRepository(postgresPool)
+	textDataServ := textDataService.NewTextDataService(textDataRepo)
+
 	listener, err := net.Listen("tcp", cfg.GRPCServer)
 	if err != nil {
 		slog.Error("Unable to create listener", slog.String("error", err.Error()))
@@ -61,6 +68,7 @@ func Run(quitSignal chan os.Signal) {
 	pbUser.RegisterUserServiceServer(serverGrpc, grpcUserHandlers.NewUserRegister(userServ, jwtManager))
 	pbCreditCard.RegisterCreditCardServiceServer(serverGrpc, grpcCreditCardHandlers.NewCreditCard(creditCardServ))
 	pbCredential.RegisterCredentialServiceServer(serverGrpc, grpcCredentialHandlers.NewCredential(credentialServ))
+	pbTextData.RegisterTextDataServiceServer(serverGrpc, grpcTextDataHandlers.NewTextData(textDataServ))
 
 	reflection.Register(serverGrpc)
 

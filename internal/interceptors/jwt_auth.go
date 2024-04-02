@@ -17,6 +17,8 @@ var authMandatoryMethods = map[string]struct{}{
 	"/proto.CreditCardService/GetLoadCreditCard":  {},
 	"/proto.CredentialService/PostSaveCredential": {},
 	"/proto.CredentialService/GetLoadCredentials": {},
+	"/proto.TextDataService/PostSaveTextData":     {},
+	"/proto.TextDataService/GetLoadTextData":      {},
 }
 
 type UserIDContextKey string
