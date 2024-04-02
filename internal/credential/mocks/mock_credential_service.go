@@ -9,6 +9,7 @@ import (
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
+	specification "github.com/msmkdenis/yap-infokeeper/internal/credential/specification"
 	model "github.com/msmkdenis/yap-infokeeper/internal/model"
 )
 
@@ -33,6 +34,21 @@ func NewMockCredentialService(ctrl *gomock.Controller) *MockCredentialService {
 // EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockCredentialService) EXPECT() *MockCredentialServiceMockRecorder {
 	return m.recorder
+}
+
+// Load mocks base method.
+func (m *MockCredentialService) Load(arg0 context.Context, arg1 *specification.CredentialSpecification) ([]model.Credential, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Load", arg0, arg1)
+	ret0, _ := ret[0].([]model.Credential)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Load indicates an expected call of Load.
+func (mr *MockCredentialServiceMockRecorder) Load(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Load", reflect.TypeOf((*MockCredentialService)(nil).Load), arg0, arg1)
 }
 
 // Save mocks base method.

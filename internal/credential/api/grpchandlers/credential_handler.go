@@ -10,12 +10,14 @@ import (
 	"google.golang.org/grpc/status"
 
 	pb "github.com/msmkdenis/yap-infokeeper/internal/credential/api/grpchandlers/proto"
+	"github.com/msmkdenis/yap-infokeeper/internal/credential/specification"
 	"github.com/msmkdenis/yap-infokeeper/internal/model"
 )
 
 // mockgen --build_flags=--mod=mod -destination=internal/credential/mocks/mock_credential_service.go -package=mocks github.com/msmkdenis/yap-infokeeper/internal/credential/api/grpchandlers CredentialService
 type CredentialService interface {
 	Save(ctx context.Context, credential model.Credential) error
+	Load(ctx context.Context, spec *specification.CredentialSpecification) ([]model.Credential, error)
 }
 
 type Credential struct {

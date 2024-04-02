@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/msmkdenis/yap-infokeeper/internal/credential/specification"
 	"github.com/msmkdenis/yap-infokeeper/internal/model"
 	apperr "github.com/msmkdenis/yap-infokeeper/pkg/apperror"
 )
@@ -11,6 +12,7 @@ import (
 // mockgen --build_flags=--mod=mod -destination=internal/credential/mocks/mock_credential_repository.go -package=mocks github.com/msmkdenis/yap-infokeeper/internal/credential/service CredentialRepository
 type CredentialRepository interface {
 	Insert(ctx context.Context, credential model.Credential) error
+	SelectAll(ctx context.Context, spec *specification.CredentialSpecification) ([]model.Credential, error)
 }
 
 type CredentialUseCase struct {
@@ -27,4 +29,13 @@ func (u *CredentialUseCase) Save(ctx context.Context, credential model.Credentia
 	}
 
 	return nil
+}
+
+func (u *CredentialUseCase) Load(ctx context.Context, spec *specification.CredentialSpecification) ([]model.Credential, error) {
+	credentials, err := u.repository.SelectAll(ctx, spec)
+	if err != nil {
+		return nil, fmt.Errorf("%s %w", apperr.Caller(), err)
+	}
+
+	return credentials, nil
 }
