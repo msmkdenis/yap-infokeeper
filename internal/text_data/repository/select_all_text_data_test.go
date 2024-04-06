@@ -19,7 +19,7 @@ import (
 var fixtureTextData string
 
 func (s *TextDataRepositoryTestSuite) Test_SelectAll() {
-	textData := s.prepareTextData()
+	textData := s.prepareTextData(fixtureTextData)
 	s.insertTestUser(textData[0].OwnerID, "login 1", "password 1")
 	s.insertTestUser(textData[1].OwnerID, "login 2", "password 2")
 	s.insertTestData(textData)
@@ -74,12 +74,9 @@ func (s *TextDataRepositoryTestSuite) Test_SelectAll() {
 			},
 			expectedError: nil,
 			filterFunc: func(data model.TextData) bool {
-				if data.OwnerID == textData[1].OwnerID &&
+				return data.OwnerID == textData[1].OwnerID &&
 					data.CreatedAt.After(time.Date(2022, 1, 1, 0, 0, 0, 0, time.UTC)) &&
-					data.CreatedAt.Before(time.Date(2023, 2, 1, 0, 0, 0, 0, time.UTC)) {
-					return true
-				}
-				return false
+					data.CreatedAt.Before(time.Date(2023, 2, 1, 0, 0, 0, 0, time.UTC))
 			},
 		},
 	}
@@ -115,9 +112,9 @@ func (s *TextDataRepositoryTestSuite) insertTestData(textData []model.TextData) 
 	assert.NoError(s.T(), err)
 }
 
-func (s *TextDataRepositoryTestSuite) prepareTextData() []model.TextData {
+func (s *TextDataRepositoryTestSuite) prepareTextData(fixture string) []model.TextData {
 	var textData []model.TextData
-	err := json.NewDecoder(strings.NewReader(fixtureTextData)).Decode(&textData)
+	err := json.NewDecoder(strings.NewReader(fixture)).Decode(&textData)
 	require.NoError(s.T(), err)
 	return textData
 }
