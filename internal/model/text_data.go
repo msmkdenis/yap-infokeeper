@@ -7,11 +7,11 @@ import (
 )
 
 type TextData struct {
-	ID        string    `db:"id" validate:"uuid"`
-	OwnerID   string    `db:"owner_id" validate:"uuid"`
-	Data      string    `db:"data" validate:"required"`
-	CreatedAt time.Time `db:"created_at"`
-	Metadata  string    `db:"metadata"`
+	ID        string    `db:"id" json:"id" validate:"uuid"`
+	OwnerID   string    `db:"owner_id" json:"owner_id" validate:"uuid"`
+	Data      string    `db:"data" json:"data" validate:"required"`
+	CreatedAt time.Time `db:"created_at" json:"created_at"`
+	Metadata  string    `db:"metadata" json:"metadata"`
 }
 
 type TextDataValidator struct {

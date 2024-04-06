@@ -1,0 +1,65 @@
+[
+  {
+    "id": "daf9add3-d898-48d3-8fbf-c6071d54bf42",
+    "owner_id": "7acb16ab-0d09-4d37-b164-0cf25408c3dd",
+    "data": "Education opens doors to endless possibilities.",
+    "metadata": "Embrace challenges, strengthen your resolve.",
+    "created_at": "2023-01-31T15:04:05Z"
+  },
+  {
+    "id": "18e7b377-c7d9-440f-88b6-8db8469dd4c8",
+    "owner_id": "5734e716-30ec-4339-8603-a7fc133edd3a",
+    "data": "Kindness is a powerful tool for unity.",
+    "metadata": "Patience brings wisdom, wisdom brings peace.",
+    "created_at": "2024-05-15T15:04:05Z"
+  },
+  {
+    "id": "138ee104-9a0b-4fde-a738-d325f3974024",
+    "owner_id": "7acb16ab-0d09-4d37-b164-0cf25408c3dd",
+    "data": "Nurture dreams, watch them blossom into reality.",
+    "metadata": "Teamwork multiplies potential, success follows.",
+    "created_at": "2024-07-18T15:04:05Z"
+  },
+  {
+  "id": "a4a2abea-f073-4451-9b0e-292d292e08c5",
+  "owner_id": "7acb16ab-0d09-4d37-b164-0cf25408c3dd",
+  "data": "Learn from the past, build a brighter future.",
+  "metadata": "Cherish friendships, they enrich life's journey.",
+  "created_at": "2023-06-21T15:04:05Z"
+  },
+  {
+    "id": "e11203ad-571f-4da8-a0fe-f2b3b74b4d2e",
+    "owner_id": "7acb16ab-0d09-4d37-b164-0cf25408c3dd",
+    "data": "A smile can transform any difficult situation.",
+    "metadata": "Pursue passions, find true happiness within.",
+    "created_at": "2022-04-27T15:04:05Z"
+  },
+  {
+    "id": "14235091-218f-4c86-b792-874dd0fb755c",
+    "owner_id": "7acb16ab-0d09-4d37-b164-0cf25408c3dd",
+    "data": "Cultivate gratitude, enhance life's satisfaction.",
+    "metadata": "Empathy fosters understanding, bridges gaps.",
+    "created_at": "2022-02-10T15:04:05Z"
+  },
+  {
+    "id": "d70b0d90-8eac-4b39-883e-d292636a0b81",
+    "owner_id": "5734e716-30ec-4339-8603-a7fc133edd3a",
+    "data": "Consistency leads to mastery in any skill.",
+    "metadata": "Optimism fuels resilience during tough times.",
+    "created_at": "2023-11-22T15:04:05Z"
+  },
+  {
+    "id": "12d84c89-f7d3-4e64-ab7e-ffb35aecbbd1",
+    "owner_id": "7acb16ab-0d09-4d37-b164-0cf25408c3dd",
+    "data": "Laughter connects hearts, creates joyful moments.",
+    "metadata": "Curiosity drives innovation, shapes the world.",
+    "created_at": "2023-11-11T15:04:05Z"
+  },
+  {
+    "id": "2d1e75ec-3b8f-48af-bc78-6d684aff95d2",
+    "owner_id": "5734e716-30ec-4339-8603-a7fc133edd3a",
+    "data": "Self-discipline paves the way to personal growth.",
+    "metadata": "Patience in relationships builds long-lasting bonds.",
+    "created_at": "2024-12-12T15:04:05Z"
+  }
+]
