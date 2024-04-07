@@ -31,7 +31,7 @@ func (h *Credential) GetLoadCredentials(ctx context.Context, in *pb.GetCredentia
 		return nil, status.Error(codes.Internal, "internal error")
 	}
 
-	credentials := make([]*pb.Credential, 0)
+	credentials := make([]*pb.Credential, 0, len(creds))
 	for _, v := range creds {
 		credentials = append(credentials, &pb.Credential{
 			Login:     v.Login,

@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/msmkdenis/yap-infokeeper/internal/credit_card/specification"
 	"github.com/msmkdenis/yap-infokeeper/internal/model"
-
 	apperr "github.com/msmkdenis/yap-infokeeper/pkg/apperror"
 )
 
@@ -14,6 +14,7 @@ type CreditCardRepository interface {
 	Insert(ctx context.Context, card model.CreditCard) error
 	SelectByOwnerIDCardNumber(ctx context.Context, ownerID, number string) (*model.CreditCard, error)
 	SelectAllByOwnerID(ctx context.Context, ownerID string) ([]model.CreditCard, error)
+	SelectAll(ctx context.Context, spec *specification.CreditCardSpecification) ([]model.CreditCard, error)
 }
 
 type CreditCardUseCase struct {
@@ -32,17 +33,8 @@ func (u *CreditCardUseCase) Save(ctx context.Context, card model.CreditCard) err
 	return nil
 }
 
-func (u *CreditCardUseCase) SelectByOwnerIDCardNumber(ctx context.Context, ownerID, number string) (*model.CreditCard, error) {
-	card, err := u.repository.SelectByOwnerIDCardNumber(ctx, ownerID, number)
-	if err != nil {
-		return nil, fmt.Errorf("%s %w", apperr.Caller(), err)
-	}
-
-	return card, nil
-}
-
-func (u *CreditCardUseCase) SelectAllByOwnerID(ctx context.Context, ownerID string) ([]model.CreditCard, error) {
-	cards, err := u.repository.SelectAllByOwnerID(ctx, ownerID)
+func (u *CreditCardUseCase) Load(ctx context.Context, spec *specification.CreditCardSpecification) ([]model.CreditCard, error) {
+	cards, err := u.repository.SelectAll(ctx, spec)
 	if err != nil {
 		return nil, fmt.Errorf("%s %w", apperr.Caller(), err)
 	}

@@ -31,7 +31,7 @@ func (h *TextData) GetLoadTextData(ctx context.Context, in *pb.GetTextDataReques
 		return nil, status.Error(codes.Internal, "internal error")
 	}
 
-	textData := make([]*pb.TextData, 0)
+	textData := make([]*pb.TextData, 0, len(texData))
 	for _, v := range texData {
 		textData = append(textData, &pb.TextData{
 			Data:      v.Data,

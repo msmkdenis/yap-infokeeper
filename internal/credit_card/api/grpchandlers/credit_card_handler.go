@@ -10,14 +10,14 @@ import (
 	"google.golang.org/grpc/status"
 
 	pb "github.com/msmkdenis/yap-infokeeper/internal/credit_card/api/grpchandlers/proto"
+	"github.com/msmkdenis/yap-infokeeper/internal/credit_card/specification"
 	"github.com/msmkdenis/yap-infokeeper/internal/model"
 )
 
 // mockgen --build_flags=--mod=mod -destination=internal/credit_card/mocks/mock_credit_card_service.go -package=mocks github.com/msmkdenis/yap-infokeeper/internal/credit_card/api/grpchandlers CreditCardService
 type CreditCardService interface {
 	Save(ctx context.Context, card model.CreditCard) error
-	SelectByOwnerIDCardNumber(ctx context.Context, ownerID, number string) (*model.CreditCard, error)
-	SelectAllByOwnerID(ctx context.Context, ownerID string) ([]model.CreditCard, error)
+	Load(ctx context.Context, spec *specification.CreditCardSpecification) ([]model.CreditCard, error)
 }
 
 type CreditCard struct {

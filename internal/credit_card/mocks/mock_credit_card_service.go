@@ -9,6 +9,7 @@ import (
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
+	specification "github.com/msmkdenis/yap-infokeeper/internal/credit_card/specification"
 	model "github.com/msmkdenis/yap-infokeeper/internal/model"
 )
 
@@ -35,6 +36,21 @@ func (m *MockCreditCardService) EXPECT() *MockCreditCardServiceMockRecorder {
 	return m.recorder
 }
 
+// Load mocks base method.
+func (m *MockCreditCardService) Load(arg0 context.Context, arg1 *specification.CreditCardSpecification) ([]model.CreditCard, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Load", arg0, arg1)
+	ret0, _ := ret[0].([]model.CreditCard)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Load indicates an expected call of Load.
+func (mr *MockCreditCardServiceMockRecorder) Load(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Load", reflect.TypeOf((*MockCreditCardService)(nil).Load), arg0, arg1)
+}
+
 // Save mocks base method.
 func (m *MockCreditCardService) Save(arg0 context.Context, arg1 model.CreditCard) error {
 	m.ctrl.T.Helper()
@@ -47,34 +63,4 @@ func (m *MockCreditCardService) Save(arg0 context.Context, arg1 model.CreditCard
 func (mr *MockCreditCardServiceMockRecorder) Save(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockCreditCardService)(nil).Save), arg0, arg1)
-}
-
-// SelectAllByOwnerID mocks base method.
-func (m *MockCreditCardService) SelectAllByOwnerID(arg0 context.Context, arg1 string) ([]model.CreditCard, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "SelectAllByOwnerID", arg0, arg1)
-	ret0, _ := ret[0].([]model.CreditCard)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// SelectAllByOwnerID indicates an expected call of SelectAllByOwnerID.
-func (mr *MockCreditCardServiceMockRecorder) SelectAllByOwnerID(arg0, arg1 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SelectAllByOwnerID", reflect.TypeOf((*MockCreditCardService)(nil).SelectAllByOwnerID), arg0, arg1)
-}
-
-// SelectByOwnerIDCardNumber mocks base method.
-func (m *MockCreditCardService) SelectByOwnerIDCardNumber(arg0 context.Context, arg1, arg2 string) (*model.CreditCard, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "SelectByOwnerIDCardNumber", arg0, arg1, arg2)
-	ret0, _ := ret[0].(*model.CreditCard)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// SelectByOwnerIDCardNumber indicates an expected call of SelectByOwnerIDCardNumber.
-func (mr *MockCreditCardServiceMockRecorder) SelectByOwnerIDCardNumber(arg0, arg1, arg2 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SelectByOwnerIDCardNumber", reflect.TypeOf((*MockCreditCardService)(nil).SelectByOwnerIDCardNumber), arg0, arg1, arg2)
 }

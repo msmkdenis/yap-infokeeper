@@ -23,10 +23,19 @@ message CreditCardCredentials {
   string cvv_code = 4;
   string pin_code = 5;
   string metadata = 6;
+  string created_at = 7;
 }
 
 message GetCreditCardRequest {
-  string card_number = 1;
+  string number = 1;
+  string owner = 2;
+  string cvv_code = 3;
+  string pin_code = 4;
+  string metadata = 5;
+  string expires_after = 6;
+  string expires_before = 7;
+  string created_after = 8;
+  string created_before = 9;
 }
 
 message GetCreditCardResponse {
