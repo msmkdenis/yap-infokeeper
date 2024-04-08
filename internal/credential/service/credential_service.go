@@ -9,7 +9,6 @@ import (
 	apperr "github.com/msmkdenis/yap-infokeeper/pkg/apperror"
 )
 
-// mockgen --build_flags=--mod=mod -destination=internal/credential/mocks/mock_credential_repository.go -package=mocks github.com/msmkdenis/yap-infokeeper/internal/credential/service CredentialRepository
 type CredentialRepository interface {
 	Insert(ctx context.Context, credential model.Credential) error
 	SelectAll(ctx context.Context, spec *specification.CredentialSpecification) ([]model.Credential, error)

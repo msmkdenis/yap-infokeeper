@@ -6,10 +6,10 @@ package mocks
 
 import (
 	context "context"
-	"github.com/msmkdenis/yap-infokeeper/internal/model"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
+	model "github.com/msmkdenis/yap-infokeeper/internal/model"
 )
 
 // MockUserRepository is a mock of UserRepository interface.
@@ -47,4 +47,19 @@ func (m *MockUserRepository) Insert(arg0 context.Context, arg1 model.User) error
 func (mr *MockUserRepositoryMockRecorder) Insert(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Insert", reflect.TypeOf((*MockUserRepository)(nil).Insert), arg0, arg1)
+}
+
+// SelectByLogin mocks base method.
+func (m *MockUserRepository) SelectByLogin(arg0 context.Context, arg1 string) (*model.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SelectByLogin", arg0, arg1)
+	ret0, _ := ret[0].(*model.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// SelectByLogin indicates an expected call of SelectByLogin.
+func (mr *MockUserRepositoryMockRecorder) SelectByLogin(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SelectByLogin", reflect.TypeOf((*MockUserRepository)(nil).SelectByLogin), arg0, arg1)
 }

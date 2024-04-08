@@ -9,7 +9,6 @@ import (
 	apperr "github.com/msmkdenis/yap-infokeeper/pkg/apperror"
 )
 
-// mockgen --build_flags=--mod=mod -destination=internal/text_data/mocks/mock_text_data_repository.go -package=mocks github.com/msmkdenis/yap-infokeeper/internal/text_data/service TextDataRepository
 type TextDataRepository interface {
 	Insert(ctx context.Context, textData model.TextData) error
 	SelectAll(ctx context.Context, spec *specification.TextDataSpecification) ([]model.TextData, error)

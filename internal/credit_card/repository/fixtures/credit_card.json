@@ -1,0 +1,101 @@
+[
+  {
+    "id": "303c1eb4-cd0a-4e63-a7da-77c1d1b3c9ff",
+    "number": "4016591107248520",
+    "owner_id": "7acb16ab-0d09-4d37-b164-0cf25408c3dd",
+    "owner_name": "Onyekachukwu Stevens",
+    "expires_at": "2023-01-12T00:00:00Z",
+    "cvv_code": "751",
+    "pin_code": "1234",
+    "created_at": "2022-01-01T00:00:00Z",
+    "metadata": ""
+  },
+  {
+    "id": "d7a8150b-9f9a-44df-aedc-223bebc1d660",
+    "number": "4114035339058951",
+    "owner_id": "7acb16ab-0d09-4d37-b164-0cf25408c3dd",
+    "owner_name": "Joe Patel",
+    "expires_at": "2025-01-01T00:00:00Z",
+    "cvv_code": "123",
+    "pin_code": "1234",
+    "created_at": "2022-01-01T00:00:00Z",
+    "metadata": ""
+  },
+  {
+    "id": "ba96695a-c871-4f79-bea4-77e63337580a",
+    "number": "4114834833672642",
+    "owner_id": "7acb16ab-0d09-4d37-b164-0cf25408c3dd",
+    "owner_name": "Michael Fuller",
+    "expires_at": "2025-01-01T00:00:00Z",
+    "cvv_code": "123",
+    "pin_code": "1234",
+    "created_at": "2022-01-01T00:00:00Z",
+    "metadata": ""
+  },
+  {
+    "id": "6c498ba4-da69-4b24-8adc-2fc70e188061",
+    "number": "4443734963800868",
+    "owner_id": "7acb16ab-0d09-4d37-b164-0cf25408c3dd",
+    "owner_name": "Michael Fuller",
+    "expires_at": "2025-01-01T00:00:00Z",
+    "cvv_code": "123",
+    "pin_code": "1234",
+    "created_at": "2022-01-01T00:00:00Z",
+    "metadata": ""
+  },
+  {
+    "id": "7c6dedf3-2724-48e5-86d1-1fdf3d611887",
+    "number": "4470036062579807",
+    "owner_id": "7acb16ab-0d09-4d37-b164-0cf25408c3dd",
+    "owner_name": "Victor Dyer",
+    "expires_at": "2025-01-01T00:00:00Z",
+    "cvv_code": "123",
+    "pin_code": "1234",
+    "created_at": "2022-01-01T00:00:00Z",
+    "metadata": ""
+  },
+  {
+    "id": "f2f6a4ea-b51e-49a7-b06e-b26dee40da8f",
+    "number": "4433482492366025",
+    "owner_id": "7acb16ab-0d09-4d37-b164-0cf25408c3dd",
+    "owner_name": "Alyssa Yang",
+    "expires_at": "2025-01-01T00:00:00Z",
+    "cvv_code": "123",
+    "pin_code": "1234",
+    "created_at": "2022-01-01T00:00:00Z",
+    "metadata": ""
+  },
+  {
+    "id": "4da92508-2aea-490c-adce-66864bd261fc",
+    "number": "4453994149181883",
+    "owner_id": "7acb16ab-0d09-4d37-b164-0cf25408c3dd",
+    "owner_name": "Isabella Rocha",
+    "expires_at": "2025-01-01T00:00:00Z",
+    "cvv_code": "123",
+    "pin_code": "1234",
+    "created_at": "2022-01-01T00:00:00Z",
+    "metadata": ""
+  },
+  {
+    "id": "986af434-1125-4311-bef9-6603d19f75f4",
+    "number": "4691634511572697",
+    "owner_id": "7acb16ab-0d09-4d37-b164-0cf25408c3dd",
+    "owner_name": "Emma Jenkins",
+    "expires_at": "2025-01-01T00:00:00Z",
+    "cvv_code": "123",
+    "pin_code": "1234",
+    "created_at": "2022-01-01T00:00:00Z",
+    "metadata": ""
+  },
+  {
+    "id": "68bb4d64-5e37-4b53-be3c-5f80121867c9",
+    "number": "4975057080480182",
+    "owner_id": "7acb16ab-0d09-4d37-b164-0cf25408c3dd",
+    "owner_name": "Emma Stone",
+    "expires_at": "2025-01-01T00:00:00Z",
+    "cvv_code": "123",
+    "pin_code": "1234",
+    "created_at": "2022-01-01T00:00:00Z",
+    "metadata": ""
+  }
+]

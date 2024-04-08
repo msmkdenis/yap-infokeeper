@@ -14,7 +14,7 @@ import (
 	"github.com/msmkdenis/yap-infokeeper/internal/model"
 )
 
-// mockgen --build_flags=--mod=mod -destination=internal/credential/mocks/mock_credential_service.go -package=mocks github.com/msmkdenis/yap-infokeeper/internal/credential/api/grpchandlers CredentialService
+// mockgen
 type CredentialService interface {
 	Save(ctx context.Context, credential model.Credential) error
 	Load(ctx context.Context, spec *specification.CredentialSpecification) ([]model.Credential, error)

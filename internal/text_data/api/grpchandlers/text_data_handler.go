@@ -14,7 +14,6 @@ import (
 	"github.com/msmkdenis/yap-infokeeper/internal/text_data/specification"
 )
 
-// mockgen --build_flags=--mod=mod -destination=internal/text_data/mocks/mock_text_data_service.go -package=mocks github.com/msmkdenis/yap-infokeeper/internal/text_data/api/grpchandlers TextDataService
 type TextDataService interface {
 	Save(ctx context.Context, textData model.TextData) error
 	Load(ctx context.Context, spec *specification.TextDataSpecification) ([]model.TextData, error)

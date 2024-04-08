@@ -11,15 +11,15 @@ import (
 )
 
 type CreditCard struct {
-	ID        string    `db:"id" validate:"uuid"`
-	Number    string    `db:"number" validate:"card_number"`
-	OwnerID   string    `db:"owner_id" validate:"uuid"`
-	OwnerName string    `db:"owner_name" validate:"owner"`
-	ExpiresAt time.Time `db:"expires_at"`
-	CVVCode   string    `db:"cvv_code" validate:"cvv"`
-	PinCode   string    `db:"pin_code" validate:"pin"`
-	CreatedAt time.Time `db:"created_at"`
-	Metadata  string    `db:"metadata"`
+	ID        string    `db:"id" json:"id" validate:"uuid"`
+	Number    string    `db:"number" json:"number" validate:"card_number"`
+	OwnerID   string    `db:"owner_id" json:"owner_id" validate:"uuid"`
+	OwnerName string    `db:"owner_name" json:"owner_name" validate:"owner"`
+	ExpiresAt time.Time `db:"expires_at" json:"expires_at"`
+	CVVCode   string    `db:"cvv_code" json:"cvv_code" validate:"cvv"`
+	PinCode   string    `db:"pin_code" json:"pin_code" validate:"pin"`
+	CreatedAt time.Time `db:"created_at" json:"created_at"`
+	Metadata  string    `db:"metadata" json:"metadata"`
 }
 
 type CreditCardRequestValidator struct {
