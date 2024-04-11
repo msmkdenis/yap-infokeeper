@@ -12,9 +12,9 @@ import (
 	"google.golang.org/grpc/test/bufconn"
 
 	"github.com/msmkdenis/yap-infokeeper/internal/config"
-	pb "github.com/msmkdenis/yap-infokeeper/internal/credential/api/grpchandlers/proto"
 	"github.com/msmkdenis/yap-infokeeper/internal/credential/mocks"
 	"github.com/msmkdenis/yap-infokeeper/internal/interceptors"
+	pb "github.com/msmkdenis/yap-infokeeper/internal/proto/credential"
 	"github.com/msmkdenis/yap-infokeeper/pkg/jwtgen"
 )
 

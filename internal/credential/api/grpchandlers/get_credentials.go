@@ -7,9 +7,9 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	pb "github.com/msmkdenis/yap-infokeeper/internal/credential/api/grpchandlers/proto"
 	"github.com/msmkdenis/yap-infokeeper/internal/credential/specification"
 	"github.com/msmkdenis/yap-infokeeper/internal/interceptors"
+	pb "github.com/msmkdenis/yap-infokeeper/internal/proto/credential"
 )
 
 func (h *Credential) GetLoadCredentials(ctx context.Context, in *pb.GetCredentialRequest) (*pb.GetCredentialResponse, error) {

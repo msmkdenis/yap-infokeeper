@@ -4,7 +4,7 @@
 // - protoc             v4.25.3
 // source: internal/text_data/api/grpchandlers/proto/text_data.proto
 
-package proto
+package text_data
 
 import (
 	context "context"

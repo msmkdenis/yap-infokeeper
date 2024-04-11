@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	pb "github.com/msmkdenis/yap-infokeeper/internal/credential/api/grpchandlers/proto"
+	pb "github.com/msmkdenis/yap-infokeeper/internal/proto/credential"
 )
 
 type CredentialSpecification struct {

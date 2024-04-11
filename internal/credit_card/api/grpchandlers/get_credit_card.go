@@ -7,9 +7,9 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	pb "github.com/msmkdenis/yap-infokeeper/internal/credit_card/api/grpchandlers/proto"
 	"github.com/msmkdenis/yap-infokeeper/internal/credit_card/specification"
 	"github.com/msmkdenis/yap-infokeeper/internal/interceptors"
+	pb "github.com/msmkdenis/yap-infokeeper/internal/proto/credit_card"
 )
 
 func (h *CreditCard) GetLoadCreditCard(ctx context.Context, in *pb.GetCreditCardRequest) (*pb.GetCreditCardResponse, error) {

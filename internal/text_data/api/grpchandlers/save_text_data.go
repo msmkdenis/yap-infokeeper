@@ -9,7 +9,7 @@ import (
 
 	"github.com/msmkdenis/yap-infokeeper/internal/interceptors"
 	"github.com/msmkdenis/yap-infokeeper/internal/model"
-	pb "github.com/msmkdenis/yap-infokeeper/internal/text_data/api/grpchandlers/proto"
+	pb "github.com/msmkdenis/yap-infokeeper/internal/proto/text_data"
 )
 
 func (h *TextData) PostSaveTextData(ctx context.Context, in *pb.PostTextDataRequest) (*pb.PostTextDataResponse, error) {

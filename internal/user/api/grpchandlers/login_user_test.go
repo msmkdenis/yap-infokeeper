@@ -16,7 +16,7 @@ import (
 	"google.golang.org/grpc/status"
 
 	"github.com/msmkdenis/yap-infokeeper/internal/model"
-	pbUser "github.com/msmkdenis/yap-infokeeper/internal/user/api/grpchandlers/proto"
+	"github.com/msmkdenis/yap-infokeeper/internal/proto/user"
 	apperr "github.com/msmkdenis/yap-infokeeper/pkg/apperror"
 )
 
@@ -26,18 +26,18 @@ func (u *UserHandlerTestSuite) Test_PostLoginUser() {
 
 	testCases := []struct {
 		name                         string
-		body                         *pbUser.PostUserLoginRequest
+		body                         *user.PostUserLoginRequest
 		expectedCode                 codes.Code
 		expectedStatusMessage        string
 		expectedViolationField       string
 		expectedViolationDescription string
 		prepare                      func()
 		expectedToken                string
-		expectedResponse             *pbUser.PostUserLoginResponse
+		expectedResponse             *user.PostUserLoginResponse
 	}{
 		{
 			name: "BadRequest - invalid email",
-			body: &pbUser.PostUserLoginRequest{
+			body: &user.PostUserLoginRequest{
 				Login:    "invalid-email",
 				Password: []byte("test"),
 			},
@@ -51,7 +51,7 @@ func (u *UserHandlerTestSuite) Test_PostLoginUser() {
 		},
 		{
 			name: "BadRequest - zero length password",
-			body: &pbUser.PostUserLoginRequest{
+			body: &user.PostUserLoginRequest{
 				Login:    "msmkdenis@gmail.com",
 				Password: []byte(""),
 			},
@@ -65,7 +65,7 @@ func (u *UserHandlerTestSuite) Test_PostLoginUser() {
 		},
 		{
 			name: "Unauthenticated - failed to login, invalid password",
-			body: &pbUser.PostUserLoginRequest{
+			body: &user.PostUserLoginRequest{
 				Login:    "msmkdenis@gmail.com",
 				Password: []byte("test"),
 			},
@@ -79,7 +79,7 @@ func (u *UserHandlerTestSuite) Test_PostLoginUser() {
 		},
 		{
 			name: "Unauthenticated - failed to login, user not found",
-			body: &pbUser.PostUserLoginRequest{
+			body: &user.PostUserLoginRequest{
 				Login:    "msmkdenis@gmail.com",
 				Password: []byte("test"),
 			},
@@ -93,7 +93,7 @@ func (u *UserHandlerTestSuite) Test_PostLoginUser() {
 		},
 		{
 			name: "Unauthenticated - internal error",
-			body: &pbUser.PostUserLoginRequest{
+			body: &user.PostUserLoginRequest{
 				Login:    "msmkdenis@gmail.com",
 				Password: []byte("test"),
 			},
@@ -107,7 +107,7 @@ func (u *UserHandlerTestSuite) Test_PostLoginUser() {
 		},
 		{
 			name: "Successful login",
-			body: &pbUser.PostUserLoginRequest{
+			body: &user.PostUserLoginRequest{
 				Login:    "msmkdenis@gmail.com",
 				Password: []byte("test"),
 			},
@@ -137,7 +137,7 @@ func (u *UserHandlerTestSuite) Test_PostLoginUser() {
 				grpc.WithTransportCredentials(insecure.NewCredentials()))
 			defer conn.Close()
 
-			client := pbUser.NewUserServiceClient(conn)
+			client := user.NewUserServiceClient(conn)
 			resp, err := client.PostLoginUser(ctx, test.body)
 
 			st := status.Convert(err)

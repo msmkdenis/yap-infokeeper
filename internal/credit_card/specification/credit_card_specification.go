@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	pb "github.com/msmkdenis/yap-infokeeper/internal/credit_card/api/grpchandlers/proto"
+	pb "github.com/msmkdenis/yap-infokeeper/internal/proto/credit_card"
 )
 
 type CreditCardSpecification struct {

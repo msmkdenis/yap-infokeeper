@@ -15,7 +15,7 @@ import (
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 
-	pb "github.com/msmkdenis/yap-infokeeper/internal/text_data/api/grpchandlers/proto"
+	"github.com/msmkdenis/yap-infokeeper/internal/proto/text_data"
 )
 
 func (c *TextDataHandlerTestSuite) Test_PostSaveTextData() {
@@ -25,7 +25,7 @@ func (c *TextDataHandlerTestSuite) Test_PostSaveTextData() {
 	testCases := []struct {
 		name                         string
 		token                        string
-		body                         *pb.PostTextDataRequest
+		body                         *text_data.PostTextDataRequest
 		expectedCode                 codes.Code
 		expectedStatusMessage        string
 		expectedViolationField       string
@@ -35,7 +35,7 @@ func (c *TextDataHandlerTestSuite) Test_PostSaveTextData() {
 		{
 			name:  "BadRequest - invalid uuid",
 			token: token,
-			body: &pb.PostTextDataRequest{
+			body: &text_data.PostTextDataRequest{
 				Uuid:     "invalid uuid",
 				Data:     "some data",
 				Metadata: "some metadata",
@@ -51,7 +51,7 @@ func (c *TextDataHandlerTestSuite) Test_PostSaveTextData() {
 		{
 			name:  "BadRequest - empty data",
 			token: token,
-			body: &pb.PostTextDataRequest{
+			body: &text_data.PostTextDataRequest{
 				Uuid:     "050a289a-d10a-417b-ab89-3acfca0f6529",
 				Data:     "",
 				Metadata: "some metadata",
@@ -67,7 +67,7 @@ func (c *TextDataHandlerTestSuite) Test_PostSaveTextData() {
 		{
 			name:  "Unauthorized - token not found",
 			token: "",
-			body: &pb.PostTextDataRequest{
+			body: &text_data.PostTextDataRequest{
 				Uuid:     "050a289a-d10a-417b-ab89-3acfca0f6529",
 				Data:     "some data",
 				Metadata: "some metadata",
@@ -81,7 +81,7 @@ func (c *TextDataHandlerTestSuite) Test_PostSaveTextData() {
 		{
 			name:  "Internal error - unable to save text data",
 			token: token,
-			body: &pb.PostTextDataRequest{
+			body: &text_data.PostTextDataRequest{
 				Uuid:     "050a289a-d10a-417b-ab89-3acfca0f6529",
 				Data:     "some data",
 				Metadata: "some metadata",
@@ -95,7 +95,7 @@ func (c *TextDataHandlerTestSuite) Test_PostSaveTextData() {
 		{
 			name:  "Successful text data saved",
 			token: token,
-			body: &pb.PostTextDataRequest{
+			body: &text_data.PostTextDataRequest{
 				Uuid:     "050a289a-d10a-417b-ab89-3acfca0f6529",
 				Data:     "some data",
 				Metadata: "some metadata",
@@ -117,7 +117,7 @@ func (c *TextDataHandlerTestSuite) Test_PostSaveTextData() {
 				grpc.WithTransportCredentials(insecure.NewCredentials()))
 			defer conn.Close()
 
-			client := pb.NewTextDataServiceClient(conn)
+			client := text_data.NewTextDataServiceClient(conn)
 			_, err := client.PostSaveTextData(ctx, test.body)
 
 			st := status.Convert(err)

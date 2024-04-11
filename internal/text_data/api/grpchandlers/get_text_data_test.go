@@ -16,7 +16,7 @@ import (
 	"google.golang.org/grpc/status"
 
 	"github.com/msmkdenis/yap-infokeeper/internal/model"
-	pb "github.com/msmkdenis/yap-infokeeper/internal/text_data/api/grpchandlers/proto"
+	"github.com/msmkdenis/yap-infokeeper/internal/proto/text_data"
 )
 
 func (c *TextDataHandlerTestSuite) Test_GetLoadCredentials() {
@@ -43,16 +43,16 @@ func (c *TextDataHandlerTestSuite) Test_GetLoadCredentials() {
 	testCases := []struct {
 		name                  string
 		token                 string
-		body                  *pb.GetTextDataRequest
+		body                  *text_data.GetTextDataRequest
 		expectedCode          codes.Code
 		expectedStatusMessage string
 		prepare               func()
-		expectedBody          []*pb.TextData
+		expectedBody          []*text_data.TextData
 	}{
 		{
 			name:                  "Unauthorized - token not found",
 			token:                 "",
-			body:                  &pb.GetTextDataRequest{},
+			body:                  &text_data.GetTextDataRequest{},
 			expectedCode:          codes.Unauthenticated,
 			expectedStatusMessage: "authentification by UserID failed",
 			prepare: func() {
@@ -62,7 +62,7 @@ func (c *TextDataHandlerTestSuite) Test_GetLoadCredentials() {
 		{
 			name:  "Internal - internal error",
 			token: token,
-			body: &pb.GetTextDataRequest{
+			body: &text_data.GetTextDataRequest{
 				Data:          "data",
 				Metadata:      "metadata",
 				CreatedAfter:  "2020-01-01",
@@ -77,7 +77,7 @@ func (c *TextDataHandlerTestSuite) Test_GetLoadCredentials() {
 		{
 			name:  "Bad request - invalid date CreatedAfter",
 			token: token,
-			body: &pb.GetTextDataRequest{
+			body: &text_data.GetTextDataRequest{
 				Data:          "data",
 				Metadata:      "metadata",
 				CreatedAfter:  "invalid date",
@@ -92,7 +92,7 @@ func (c *TextDataHandlerTestSuite) Test_GetLoadCredentials() {
 		{
 			name:  "Bad request - invalid date CreatedBefore",
 			token: token,
-			body: &pb.GetTextDataRequest{
+			body: &text_data.GetTextDataRequest{
 				Data:          "data",
 				Metadata:      "metadata",
 				CreatedAfter:  "2020-01-01",
@@ -107,7 +107,7 @@ func (c *TextDataHandlerTestSuite) Test_GetLoadCredentials() {
 		{
 			name:  "Success - find text data",
 			token: token,
-			body: &pb.GetTextDataRequest{
+			body: &text_data.GetTextDataRequest{
 				Data:          "data",
 				Metadata:      "metadata",
 				CreatedAfter:  "2020-01-01",
@@ -117,7 +117,7 @@ func (c *TextDataHandlerTestSuite) Test_GetLoadCredentials() {
 			prepare: func() {
 				c.textDataService.EXPECT().Load(gomock.Any(), gomock.Any()).Times(1).Return(textDataChunks, nil)
 			},
-			expectedBody: []*pb.TextData{
+			expectedBody: []*text_data.TextData{
 				{
 					Data:      textDataChunks[0].Data,
 					Metadata:  textDataChunks[0].Metadata,
@@ -142,7 +142,7 @@ func (c *TextDataHandlerTestSuite) Test_GetLoadCredentials() {
 				grpc.WithTransportCredentials(insecure.NewCredentials()))
 			defer conn.Close()
 
-			client := pb.NewTextDataServiceClient(conn)
+			client := text_data.NewTextDataServiceClient(conn)
 			resp, err := client.GetLoadTextData(ctx, test.body)
 			if resp != nil {
 				assert.Equal(t, test.expectedBody, resp.Data)

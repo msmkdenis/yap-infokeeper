@@ -12,9 +12,9 @@ import (
 	"google.golang.org/grpc/test/bufconn"
 
 	"github.com/msmkdenis/yap-infokeeper/internal/config"
-	pbCreditCard "github.com/msmkdenis/yap-infokeeper/internal/credit_card/api/grpchandlers/proto"
 	"github.com/msmkdenis/yap-infokeeper/internal/credit_card/mocks"
 	"github.com/msmkdenis/yap-infokeeper/internal/interceptors"
+	pbCreditCard "github.com/msmkdenis/yap-infokeeper/internal/proto/credit_card"
 	"github.com/msmkdenis/yap-infokeeper/pkg/jwtgen"
 )
 

@@ -10,7 +10,7 @@ import (
 	"google.golang.org/grpc/status"
 
 	"github.com/msmkdenis/yap-infokeeper/internal/model"
-	pb "github.com/msmkdenis/yap-infokeeper/internal/text_data/api/grpchandlers/proto"
+	pb "github.com/msmkdenis/yap-infokeeper/internal/proto/text_data"
 	"github.com/msmkdenis/yap-infokeeper/internal/text_data/specification"
 )
 

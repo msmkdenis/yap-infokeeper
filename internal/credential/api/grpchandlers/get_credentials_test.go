@@ -15,8 +15,8 @@ import (
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 
-	pb "github.com/msmkdenis/yap-infokeeper/internal/credential/api/grpchandlers/proto"
 	"github.com/msmkdenis/yap-infokeeper/internal/model"
+	"github.com/msmkdenis/yap-infokeeper/internal/proto/credential"
 )
 
 func (c *CredentialHandlerTestSuite) Test_GetLoadCredentials() {
@@ -45,16 +45,16 @@ func (c *CredentialHandlerTestSuite) Test_GetLoadCredentials() {
 	testCases := []struct {
 		name                  string
 		token                 string
-		body                  *pb.GetCredentialRequest
+		body                  *credential.GetCredentialRequest
 		expectedCode          codes.Code
 		expectedStatusMessage string
 		prepare               func()
-		expectedBody          []*pb.Credential
+		expectedBody          []*credential.Credential
 	}{
 		{
 			name:                  "Unauthorized - token not found",
 			token:                 "",
-			body:                  &pb.GetCredentialRequest{},
+			body:                  &credential.GetCredentialRequest{},
 			expectedCode:          codes.Unauthenticated,
 			expectedStatusMessage: "authentification by UserID failed",
 			prepare: func() {
@@ -64,7 +64,7 @@ func (c *CredentialHandlerTestSuite) Test_GetLoadCredentials() {
 		{
 			name:  "Internal - internal error",
 			token: token,
-			body: &pb.GetCredentialRequest{
+			body: &credential.GetCredentialRequest{
 				Login:         "some login",
 				Password:      "qwerty",
 				Metadata:      "some data",
@@ -80,7 +80,7 @@ func (c *CredentialHandlerTestSuite) Test_GetLoadCredentials() {
 		{
 			name:  "Bad request - invalid date CreatedAfter",
 			token: token,
-			body: &pb.GetCredentialRequest{
+			body: &credential.GetCredentialRequest{
 				Login:         "some login",
 				Password:      "qwerty",
 				Metadata:      "some data",
@@ -96,7 +96,7 @@ func (c *CredentialHandlerTestSuite) Test_GetLoadCredentials() {
 		{
 			name:  "Bad request - invalid date CreatedBefore",
 			token: token,
-			body: &pb.GetCredentialRequest{
+			body: &credential.GetCredentialRequest{
 				Login:         "some login",
 				Password:      "qwerty",
 				Metadata:      "some data",
@@ -112,7 +112,7 @@ func (c *CredentialHandlerTestSuite) Test_GetLoadCredentials() {
 		{
 			name:  "Success - find credentials",
 			token: token,
-			body: &pb.GetCredentialRequest{
+			body: &credential.GetCredentialRequest{
 				Login:         "some login",
 				Password:      "qwerty",
 				Metadata:      "some data",
@@ -123,7 +123,7 @@ func (c *CredentialHandlerTestSuite) Test_GetLoadCredentials() {
 			prepare: func() {
 				c.credentialService.EXPECT().Load(gomock.Any(), gomock.Any()).Times(1).Return(creds, nil)
 			},
-			expectedBody: []*pb.Credential{
+			expectedBody: []*credential.Credential{
 				{
 					Login:     creds[0].Login,
 					Password:  creds[0].Password,
@@ -150,7 +150,7 @@ func (c *CredentialHandlerTestSuite) Test_GetLoadCredentials() {
 				grpc.WithTransportCredentials(insecure.NewCredentials()))
 			defer conn.Close()
 
-			client := pb.NewCredentialServiceClient(conn)
+			client := credential.NewCredentialServiceClient(conn)
 			resp, err := client.GetLoadCredentials(ctx, test.body)
 			if resp != nil {
 				assert.Equal(t, test.expectedBody, resp.Cards)

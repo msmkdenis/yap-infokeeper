@@ -48,22 +48,22 @@ gen-mock-credential-service:
 gen-proto-credit-card:
 	@protoc --go_out=. --go_opt=paths=source_relative \
        		--go-grpc_out=. --go-grpc_opt=paths=source_relative \
-       		internal/credit_card/api/grpchandlers/proto/credit_card.proto
+       		internal/proto/credit_card/credit_card.proto
 
 # Generate proto for user
 gen-proto-user:
 	@protoc --go_out=. --go_opt=paths=source_relative \
        		--go-grpc_out=. --go-grpc_opt=paths=source_relative \
-       		internal/user/api/grpchandlers/proto/user.proto
+       		internal/proto/user/user.proto
 
 # Generate proto for text data
 gen-proto-text-data:
 	@protoc --go_out=. --go_opt=paths=source_relative \
        		--go-grpc_out=. --go-grpc_opt=paths=source_relative \
-       		internal/text_data/api/grpchandlers/proto/text_data.proto
+       		internal/proto/text_data/text_data.proto
 
 # Generate proto for credential
 gen-proto-credential:
 	@protoc --go_out=. --go_opt=paths=source_relative \
        		--go-grpc_out=. --go-grpc_opt=paths=source_relative \
-       		internal/credential/api/grpchandlers/proto/credential.proto
+       		internal/proto/credential/credential.proto

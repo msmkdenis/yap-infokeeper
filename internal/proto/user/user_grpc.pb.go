@@ -4,7 +4,7 @@
 // - protoc             v4.25.3
 // source: internal/user/api/grpchandlers/proto/user.proto
 
-package proto
+package user
 
 import (
 	context "context"

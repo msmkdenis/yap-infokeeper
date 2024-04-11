@@ -9,9 +9,9 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	pb "github.com/msmkdenis/yap-infokeeper/internal/credit_card/api/grpchandlers/proto"
 	"github.com/msmkdenis/yap-infokeeper/internal/interceptors"
 	"github.com/msmkdenis/yap-infokeeper/internal/model"
+	pb "github.com/msmkdenis/yap-infokeeper/internal/proto/credit_card"
 	apperr "github.com/msmkdenis/yap-infokeeper/pkg/apperror"
 )
 

@@ -19,7 +19,7 @@ import (
 )
 
 const (
-	testDatabaseName    = "yap-infokeeper-test"
+	testDatabaseName    = "yap-infokeeper_server-test"
 	testDatabaseUser    = "postgres"
 	testDatabasePass    = "postgres"
 	testDatabasePort    = "5432/tcp"
@@ -88,7 +88,7 @@ func setupTestDatabase() (testcontainers.Container, *db.PostgresPool, error) {
 		return nil, nil, err
 	}
 
-	connection := fmt.Sprintf("user=postgres password=postgres host=%s database=yap-infokeeper-test sslmode=disable port=%d", host, port.Int())
+	connection := fmt.Sprintf("user=postgres password=postgres host=%s database=yap-infokeeper_server-test sslmode=disable port=%d", host, port.Int())
 
 	pool, err := db.NewPostgresPool(context.Background(), connection)
 	if err != nil {

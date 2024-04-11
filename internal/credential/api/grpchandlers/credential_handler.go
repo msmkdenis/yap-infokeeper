@@ -9,12 +9,11 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	pb "github.com/msmkdenis/yap-infokeeper/internal/credential/api/grpchandlers/proto"
 	"github.com/msmkdenis/yap-infokeeper/internal/credential/specification"
 	"github.com/msmkdenis/yap-infokeeper/internal/model"
+	pb "github.com/msmkdenis/yap-infokeeper/internal/proto/credential"
 )
 
-// mockgen
 type CredentialService interface {
 	Save(ctx context.Context, credential model.Credential) error
 	Load(ctx context.Context, spec *specification.CredentialSpecification) ([]model.Credential, error)

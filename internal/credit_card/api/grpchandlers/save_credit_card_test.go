@@ -15,7 +15,7 @@ import (
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 
-	pbCreditCard "github.com/msmkdenis/yap-infokeeper/internal/credit_card/api/grpchandlers/proto"
+	"github.com/msmkdenis/yap-infokeeper/internal/proto/credit_card"
 )
 
 func (c *CreditCardHandlerTestSuite) Test_PostSaveCreditCard() {
@@ -25,7 +25,7 @@ func (c *CreditCardHandlerTestSuite) Test_PostSaveCreditCard() {
 	testCases := []struct {
 		name                         string
 		token                        string
-		body                         *pbCreditCard.PostCreditCardCredentialsRequest
+		body                         *credit_card.PostCreditCardCredentialsRequest
 		expectedCode                 codes.Code
 		expectedStatusMessage        string
 		expectedViolationField       string
@@ -35,7 +35,7 @@ func (c *CreditCardHandlerTestSuite) Test_PostSaveCreditCard() {
 		{
 			name:  "BadRequest - invalid uuid",
 			token: token,
-			body: &pbCreditCard.PostCreditCardCredentialsRequest{
+			body: &credit_card.PostCreditCardCredentialsRequest{
 				Uuid:      "invalid uuid",
 				Number:    "1234 5678 9012 3456",
 				Owner:     "John Doe",
@@ -55,7 +55,7 @@ func (c *CreditCardHandlerTestSuite) Test_PostSaveCreditCard() {
 		{
 			name:  "BadRequest - invalid date",
 			token: token,
-			body: &pbCreditCard.PostCreditCardCredentialsRequest{
+			body: &credit_card.PostCreditCardCredentialsRequest{
 				Uuid:      "050a289a-d10a-417b-ab89-3acfca0f6529",
 				Number:    "1234 5678 9012 3456",
 				Owner:     "John Doe",
@@ -73,7 +73,7 @@ func (c *CreditCardHandlerTestSuite) Test_PostSaveCreditCard() {
 		{
 			name:  "BadRequest - invalid number",
 			token: token,
-			body: &pbCreditCard.PostCreditCardCredentialsRequest{
+			body: &credit_card.PostCreditCardCredentialsRequest{
 				Uuid:      "050a289a-d10a-417b-ab89-3acfca0f6529",
 				Number:    "1234 5678 9012 3456 1234",
 				Owner:     "John Doe",
@@ -93,7 +93,7 @@ func (c *CreditCardHandlerTestSuite) Test_PostSaveCreditCard() {
 		{
 			name:  "BadRequest - invalid cvv",
 			token: token,
-			body: &pbCreditCard.PostCreditCardCredentialsRequest{
+			body: &credit_card.PostCreditCardCredentialsRequest{
 				Uuid:      "050a289a-d10a-417b-ab89-3acfca0f6529",
 				Number:    "1234 5678 9012 3456",
 				Owner:     "John Doe",
@@ -113,7 +113,7 @@ func (c *CreditCardHandlerTestSuite) Test_PostSaveCreditCard() {
 		{
 			name:  "BadRequest - invalid pin",
 			token: token,
-			body: &pbCreditCard.PostCreditCardCredentialsRequest{
+			body: &credit_card.PostCreditCardCredentialsRequest{
 				Uuid:      "050a289a-d10a-417b-ab89-3acfca0f6529",
 				Number:    "1234 5678 9012 3456",
 				Owner:     "John Doe",
@@ -133,7 +133,7 @@ func (c *CreditCardHandlerTestSuite) Test_PostSaveCreditCard() {
 		{
 			name:  "Unauthorized - token not found",
 			token: "",
-			body: &pbCreditCard.PostCreditCardCredentialsRequest{
+			body: &credit_card.PostCreditCardCredentialsRequest{
 				Uuid:      "050a289a-d10a-417b-ab89-3acfca0f6529",
 				Number:    "1234 5678 9012 3456",
 				Owner:     "John Doe",
@@ -151,7 +151,7 @@ func (c *CreditCardHandlerTestSuite) Test_PostSaveCreditCard() {
 		{
 			name:  "Internal error - unable to save credit card",
 			token: token,
-			body: &pbCreditCard.PostCreditCardCredentialsRequest{
+			body: &credit_card.PostCreditCardCredentialsRequest{
 				Uuid:      "050a289a-d10a-417b-ab89-3acfca0f6529",
 				Number:    "1234 5678 9012 3456",
 				Owner:     "John Doe",
@@ -169,7 +169,7 @@ func (c *CreditCardHandlerTestSuite) Test_PostSaveCreditCard() {
 		{
 			name:  "Successful credit card saved",
 			token: token,
-			body: &pbCreditCard.PostCreditCardCredentialsRequest{
+			body: &credit_card.PostCreditCardCredentialsRequest{
 				Uuid:      "050a289a-d10a-417b-ab89-3acfca0f6529",
 				Number:    "1234 5678 9012 3456",
 				Owner:     "John Doe",
@@ -195,7 +195,7 @@ func (c *CreditCardHandlerTestSuite) Test_PostSaveCreditCard() {
 				grpc.WithTransportCredentials(insecure.NewCredentials()))
 			defer conn.Close()
 
-			client := pbCreditCard.NewCreditCardServiceClient(conn)
+			client := credit_card.NewCreditCardServiceClient(conn)
 			_, err := client.PostSaveCreditCard(ctx, test.body)
 
 			st := status.Convert(err)

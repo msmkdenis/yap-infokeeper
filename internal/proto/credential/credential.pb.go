@@ -4,7 +4,7 @@
 // 	protoc        v4.25.3
 // source: internal/credential/api/grpchandlers/proto/credential.proto
 
-package proto
+package credential
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"

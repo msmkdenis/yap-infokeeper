@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	pb "github.com/msmkdenis/yap-infokeeper/internal/text_data/api/grpchandlers/proto"
+	pb "github.com/msmkdenis/yap-infokeeper/internal/proto/text_data"
 )
 
 type TextDataSpecification struct {

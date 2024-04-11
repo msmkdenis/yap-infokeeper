@@ -4,7 +4,7 @@
 // 	protoc        v4.25.3
 // source: internal/credit_card/api/grpchandlers/proto/credit_card.proto
 
-package proto
+package credit_card
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"

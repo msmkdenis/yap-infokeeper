@@ -15,7 +15,7 @@ import (
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 
-	pb "github.com/msmkdenis/yap-infokeeper/internal/credential/api/grpchandlers/proto"
+	"github.com/msmkdenis/yap-infokeeper/internal/proto/credential"
 )
 
 func (c *CredentialHandlerTestSuite) Test_PostSaveCredential() {
@@ -25,7 +25,7 @@ func (c *CredentialHandlerTestSuite) Test_PostSaveCredential() {
 	testCases := []struct {
 		name                         string
 		token                        string
-		body                         *pb.PostCredentialRequest
+		body                         *credential.PostCredentialRequest
 		expectedCode                 codes.Code
 		expectedStatusMessage        string
 		expectedViolationField       string
@@ -35,7 +35,7 @@ func (c *CredentialHandlerTestSuite) Test_PostSaveCredential() {
 		{
 			name:  "BadRequest - invalid uuid",
 			token: token,
-			body: &pb.PostCredentialRequest{
+			body: &credential.PostCredentialRequest{
 				Uuid:     "invalid uuid",
 				Login:    "some login",
 				Password: "qwerty",
@@ -52,7 +52,7 @@ func (c *CredentialHandlerTestSuite) Test_PostSaveCredential() {
 		{
 			name:  "BadRequest - empty login",
 			token: token,
-			body: &pb.PostCredentialRequest{
+			body: &credential.PostCredentialRequest{
 				Uuid:     "050a289a-d10a-417b-ab89-3acfca0f6529",
 				Login:    "",
 				Password: "qwerty",
@@ -69,7 +69,7 @@ func (c *CredentialHandlerTestSuite) Test_PostSaveCredential() {
 		{
 			name:  "BadRequest - empty password",
 			token: token,
-			body: &pb.PostCredentialRequest{
+			body: &credential.PostCredentialRequest{
 				Uuid:     "050a289a-d10a-417b-ab89-3acfca0f6529",
 				Login:    "some login",
 				Password: "",
@@ -86,7 +86,7 @@ func (c *CredentialHandlerTestSuite) Test_PostSaveCredential() {
 		{
 			name:  "Unauthorized - token not found",
 			token: "",
-			body: &pb.PostCredentialRequest{
+			body: &credential.PostCredentialRequest{
 				Uuid:     "050a289a-d10a-417b-ab89-3acfca0f6529",
 				Login:    "some login",
 				Password: "qwerty",
@@ -101,7 +101,7 @@ func (c *CredentialHandlerTestSuite) Test_PostSaveCredential() {
 		{
 			name:  "Internal error - unable to save credential",
 			token: token,
-			body: &pb.PostCredentialRequest{
+			body: &credential.PostCredentialRequest{
 				Uuid:     "050a289a-d10a-417b-ab89-3acfca0f6529",
 				Login:    "some login",
 				Password: "qwerty",
@@ -116,7 +116,7 @@ func (c *CredentialHandlerTestSuite) Test_PostSaveCredential() {
 		{
 			name:  "Successful credential saved",
 			token: token,
-			body: &pb.PostCredentialRequest{
+			body: &credential.PostCredentialRequest{
 				Uuid:     "050a289a-d10a-417b-ab89-3acfca0f6529",
 				Login:    "some login",
 				Password: "qwerty",
@@ -139,7 +139,7 @@ func (c *CredentialHandlerTestSuite) Test_PostSaveCredential() {
 				grpc.WithTransportCredentials(insecure.NewCredentials()))
 			defer conn.Close()
 
-			client := pb.NewCredentialServiceClient(conn)
+			client := credential.NewCredentialServiceClient(conn)
 			_, err := client.PostSaveCredential(ctx, test.body)
 
 			st := status.Convert(err)

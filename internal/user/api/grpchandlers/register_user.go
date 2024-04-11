@@ -8,7 +8,7 @@ import (
 	"google.golang.org/grpc/status"
 
 	"github.com/msmkdenis/yap-infokeeper/internal/model"
-	pb "github.com/msmkdenis/yap-infokeeper/internal/user/api/grpchandlers/proto"
+	pb "github.com/msmkdenis/yap-infokeeper/internal/proto/user"
 )
 
 func (h *UserRegister) PostRegisterUser(ctx context.Context, in *pb.PostUserRegisterRequest) (*pb.PostUserRegisterResponse, error) {

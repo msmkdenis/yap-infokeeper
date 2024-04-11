@@ -13,7 +13,7 @@ import (
 
 	"github.com/msmkdenis/yap-infokeeper/internal/config"
 	"github.com/msmkdenis/yap-infokeeper/internal/interceptors"
-	pb "github.com/msmkdenis/yap-infokeeper/internal/text_data/api/grpchandlers/proto"
+	pb "github.com/msmkdenis/yap-infokeeper/internal/proto/text_data"
 	"github.com/msmkdenis/yap-infokeeper/internal/text_data/mocks"
 	"github.com/msmkdenis/yap-infokeeper/pkg/jwtgen"
 )

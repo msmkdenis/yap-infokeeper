@@ -15,8 +15,8 @@ import (
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 
-	pb "github.com/msmkdenis/yap-infokeeper/internal/credit_card/api/grpchandlers/proto"
 	"github.com/msmkdenis/yap-infokeeper/internal/model"
+	"github.com/msmkdenis/yap-infokeeper/internal/proto/credit_card"
 )
 
 func (c *CreditCardHandlerTestSuite) Test_GetLoadCreditCard() {
@@ -51,16 +51,16 @@ func (c *CreditCardHandlerTestSuite) Test_GetLoadCreditCard() {
 	testCases := []struct {
 		name                  string
 		token                 string
-		body                  *pb.GetCreditCardRequest
+		body                  *credit_card.GetCreditCardRequest
 		expectedCode          codes.Code
 		expectedStatusMessage string
 		prepare               func()
-		expectedBody          []*pb.CreditCardCredentials
+		expectedBody          []*credit_card.CreditCardCredentials
 	}{
 		{
 			name:                  "Unauthorized - token not found",
 			token:                 "",
-			body:                  &pb.GetCreditCardRequest{},
+			body:                  &credit_card.GetCreditCardRequest{},
 			expectedCode:          codes.Unauthenticated,
 			expectedStatusMessage: "authentification by UserID failed",
 			prepare: func() {
@@ -70,7 +70,7 @@ func (c *CreditCardHandlerTestSuite) Test_GetLoadCreditCard() {
 		{
 			name:                  "Internal - internal error",
 			token:                 token,
-			body:                  &pb.GetCreditCardRequest{},
+			body:                  &credit_card.GetCreditCardRequest{},
 			expectedCode:          codes.Internal,
 			expectedStatusMessage: "internal error",
 			prepare: func() {
@@ -80,7 +80,7 @@ func (c *CreditCardHandlerTestSuite) Test_GetLoadCreditCard() {
 		{
 			name:  "Bad request - invalid date CreatedAfter",
 			token: token,
-			body: &pb.GetCreditCardRequest{
+			body: &credit_card.GetCreditCardRequest{
 				CreatedAfter: "invalid date",
 			},
 			expectedCode:          codes.InvalidArgument,
@@ -92,7 +92,7 @@ func (c *CreditCardHandlerTestSuite) Test_GetLoadCreditCard() {
 		{
 			name:  "Bad request - invalid date CreatedBefore",
 			token: token,
-			body: &pb.GetCreditCardRequest{
+			body: &credit_card.GetCreditCardRequest{
 				CreatedBefore: "invalid date",
 			},
 			expectedCode:          codes.InvalidArgument,
@@ -104,7 +104,7 @@ func (c *CreditCardHandlerTestSuite) Test_GetLoadCreditCard() {
 		{
 			name:  "Bad request - invalid date ExpiresAfter",
 			token: token,
-			body: &pb.GetCreditCardRequest{
+			body: &credit_card.GetCreditCardRequest{
 				ExpiresAfter: "invalid date",
 			},
 			expectedCode:          codes.InvalidArgument,
@@ -116,7 +116,7 @@ func (c *CreditCardHandlerTestSuite) Test_GetLoadCreditCard() {
 		{
 			name:  "Bad request - invalid date ExpireBefore",
 			token: token,
-			body: &pb.GetCreditCardRequest{
+			body: &credit_card.GetCreditCardRequest{
 				ExpiresBefore: "invalid date",
 			},
 			expectedCode:          codes.InvalidArgument,
@@ -128,12 +128,12 @@ func (c *CreditCardHandlerTestSuite) Test_GetLoadCreditCard() {
 		{
 			name:         "Success - find all cards",
 			token:        token,
-			body:         &pb.GetCreditCardRequest{},
+			body:         &credit_card.GetCreditCardRequest{},
 			expectedCode: codes.OK,
 			prepare: func() {
 				c.creditCardService.EXPECT().Load(gomock.Any(), gomock.Any()).Times(1).Return(cards, nil)
 			},
-			expectedBody: []*pb.CreditCardCredentials{
+			expectedBody: []*credit_card.CreditCardCredentials{
 				{
 					Number:    cards[0].Number,
 					Owner:     cards[0].OwnerName,
@@ -166,7 +166,7 @@ func (c *CreditCardHandlerTestSuite) Test_GetLoadCreditCard() {
 				grpc.WithTransportCredentials(insecure.NewCredentials()))
 			defer conn.Close()
 
-			client := pb.NewCreditCardServiceClient(conn)
+			client := credit_card.NewCreditCardServiceClient(conn)
 			resp, err := client.GetLoadCreditCard(ctx, test.body)
 			if resp != nil {
 				assert.Equal(t, test.expectedBody, resp.Cards)

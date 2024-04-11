@@ -1,7 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"github.com/msmkdenis/yap-infokeeper/internal/app/client"
+)
 
 func main() {
-	fmt.Println("Hello, I am client!")
+	client.InfokeeperClientRun()
 }

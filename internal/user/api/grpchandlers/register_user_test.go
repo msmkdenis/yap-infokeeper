@@ -15,7 +15,7 @@ import (
 	"google.golang.org/grpc/status"
 
 	"github.com/msmkdenis/yap-infokeeper/internal/model"
-	pbUser "github.com/msmkdenis/yap-infokeeper/internal/user/api/grpchandlers/proto"
+	"github.com/msmkdenis/yap-infokeeper/internal/proto/user"
 )
 
 func (u *UserHandlerTestSuite) Test_PostRegisterUser() {
@@ -24,18 +24,18 @@ func (u *UserHandlerTestSuite) Test_PostRegisterUser() {
 
 	testCases := []struct {
 		name                         string
-		body                         *pbUser.PostUserRegisterRequest
+		body                         *user.PostUserRegisterRequest
 		expectedCode                 codes.Code
 		expectedStatusMessage        string
 		expectedViolationField       string
 		expectedViolationDescription string
 		prepare                      func()
 		expectedToken                string
-		expectedResponse             *pbUser.PostUserRegisterResponse
+		expectedResponse             *user.PostUserRegisterResponse
 	}{
 		{
 			name: "BadRequest - invalid uuid",
-			body: &pbUser.PostUserRegisterRequest{
+			body: &user.PostUserRegisterRequest{
 				Id:       "non-uuid",
 				Login:    "msmkdenis@gmail.com",
 				Password: []byte("test"),
@@ -50,7 +50,7 @@ func (u *UserHandlerTestSuite) Test_PostRegisterUser() {
 		},
 		{
 			name: "BadRequest - invalid email",
-			body: &pbUser.PostUserRegisterRequest{
+			body: &user.PostUserRegisterRequest{
 				Id:       "050a289a-d10a-417b-ab89-3acfca0f6529",
 				Login:    "invalid-email",
 				Password: []byte("test"),
@@ -65,7 +65,7 @@ func (u *UserHandlerTestSuite) Test_PostRegisterUser() {
 		},
 		{
 			name: "BadRequest - zero length password",
-			body: &pbUser.PostUserRegisterRequest{
+			body: &user.PostUserRegisterRequest{
 				Id:       "050a289a-d10a-417b-ab89-3acfca0f6529",
 				Login:    "msmkdenis@gmail.com",
 				Password: []byte(""),
@@ -80,7 +80,7 @@ func (u *UserHandlerTestSuite) Test_PostRegisterUser() {
 		},
 		{
 			name: "InternalError - failed to save user",
-			body: &pbUser.PostUserRegisterRequest{
+			body: &user.PostUserRegisterRequest{
 				Id:       "050a289a-d10a-417b-ab89-3acfca0f6529",
 				Login:    "msmkdenis@gmail.com",
 				Password: []byte("test"),
@@ -95,7 +95,7 @@ func (u *UserHandlerTestSuite) Test_PostRegisterUser() {
 		},
 		{
 			name: "Successful registration",
-			body: &pbUser.PostUserRegisterRequest{
+			body: &user.PostUserRegisterRequest{
 				Id:       "050a289a-d10a-417b-ab89-3acfca0f6529",
 				Login:    "msmkdenis@gmail.com",
 				Password: []byte("test"),
@@ -125,7 +125,7 @@ func (u *UserHandlerTestSuite) Test_PostRegisterUser() {
 				grpc.WithTransportCredentials(insecure.NewCredentials()))
 			defer conn.Close()
 
-			client := pbUser.NewUserServiceClient(conn)
+			client := user.NewUserServiceClient(conn)
 			resp, err := client.PostRegisterUser(ctx, test.body)
 
 			st := status.Convert(err)

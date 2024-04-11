@@ -5,13 +5,12 @@ import (
 	"log/slog"
 	"strings"
 
-	"github.com/msmkdenis/yap-infokeeper/internal/model"
-
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	pb "github.com/msmkdenis/yap-infokeeper/internal/user/api/grpchandlers/proto"
+	"github.com/msmkdenis/yap-infokeeper/internal/model"
+	pb "github.com/msmkdenis/yap-infokeeper/internal/proto/user"
 	"github.com/msmkdenis/yap-infokeeper/pkg/jwtgen"
 )
 
