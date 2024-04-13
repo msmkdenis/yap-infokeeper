@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "github.com/msmkdenis/yap-infokeeper/internal/credit_card/api/grpchandlers/proto";
+
+message PostCreditCardCredentialsRequest {
+  string uuid = 1;
+  string number = 2;
+  string owner = 3;
+  string expires_at = 4;
+  string cvv_code = 5;
+  string pin_code = 6;
+  string metadata = 7;
+}
+
+message PostCreditCardCredentialsResponse {}
+
+message CreditCardCredentials {
+  string number = 1;
+  string owner = 2;
+  string expires_at = 3;
+  string cvv_code = 4;
+  string pin_code = 5;
+  string metadata = 6;
+  string created_at = 7;
+}
+
+message GetCreditCardRequest {
+  string number = 1;
+  string owner = 2;
+  string cvv_code = 3;
+  string pin_code = 4;
+  string metadata = 5;
+  string expires_after = 6;
+  string expires_before = 7;
+  string created_after = 8;
+  string created_before = 9;
+}
+
+message GetCreditCardResponse {
+  repeated CreditCardCredentials cards = 1;
+}
+
+service CreditCardService {
+  rpc PostSaveCreditCard(PostCreditCardCredentialsRequest) returns (PostCreditCardCredentialsResponse);
+  rpc GetLoadCreditCard(GetCreditCardRequest) returns (GetCreditCardResponse);
+}

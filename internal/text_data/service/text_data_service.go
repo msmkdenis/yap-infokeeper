@@ -1,0 +1,40 @@
+package service
+
+import (
+	"context"
+	"fmt"
+
+	"github.com/msmkdenis/yap-infokeeper/internal/model"
+	"github.com/msmkdenis/yap-infokeeper/internal/text_data/specification"
+	"github.com/msmkdenis/yap-infokeeper/pkg/caller"
+)
+
+type TextDataRepository interface {
+	Insert(ctx context.Context, textData model.TextData) error
+	SelectAll(ctx context.Context, spec *specification.TextDataSpecification) ([]model.TextData, error)
+}
+
+type TextDataUseCase struct {
+	repository TextDataRepository
+}
+
+func NewTextDataService(repository TextDataRepository) *TextDataUseCase {
+	return &TextDataUseCase{repository: repository}
+}
+
+func (u *TextDataUseCase) Save(ctx context.Context, textData model.TextData) error {
+	if err := u.repository.Insert(ctx, textData); err != nil {
+		return fmt.Errorf("%s %w", caller.CodeLine(), err)
+	}
+
+	return nil
+}
+
+func (u *TextDataUseCase) Load(ctx context.Context, spec *specification.TextDataSpecification) ([]model.TextData, error) {
+	textData, err := u.repository.SelectAll(ctx, spec)
+	if err != nil {
+		return nil, fmt.Errorf("%s %w", caller.CodeLine(), err)
+	}
+
+	return textData, nil
+}

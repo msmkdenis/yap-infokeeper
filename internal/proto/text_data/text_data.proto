@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "github.com/msmkdenis/yap-infokeeper/internal/text_data/api/grpchandlers/proto";
+
+message PostTextDataRequest {
+  string uuid = 1;
+  string data = 2;
+  string metadata = 3;
+}
+
+message PostTextDataResponse {}
+
+message GetTextDataRequest {
+  string data = 1;
+  string metadata = 2;
+  string created_after = 3;
+  string created_before = 4;
+}
+
+message TextData {
+  string data = 1;
+  string metadata = 2;
+  string created_at = 3;
+}
+
+message GetTextDataResponse {
+  repeated TextData data = 1;
+}
+
+service TextDataService {
+  rpc PostSaveTextData(PostTextDataRequest) returns (PostTextDataResponse);
+  rpc GetLoadTextData(GetTextDataRequest) returns (GetTextDataResponse);
+}
