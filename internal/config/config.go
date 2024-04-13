@@ -18,7 +18,7 @@ type Config struct {
 }
 
 func New() *Config {
-	err := godotenv.Load("infokeeper_server.env")
+	err := godotenv.Load("infokeeper.env")
 	if err != nil {
 		slog.Error("Error loading .env file, using default values")
 

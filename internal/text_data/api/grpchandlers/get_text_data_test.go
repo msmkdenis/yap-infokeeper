@@ -84,7 +84,7 @@ func (c *TextDataHandlerTestSuite) Test_GetLoadCredentials() {
 				CreatedBefore: "2026-01-01",
 			},
 			expectedCode:          codes.InvalidArgument,
-			expectedStatusMessage: "created after must be in format '2006-01-02'",
+			expectedStatusMessage: "date must be in format '2006-01-02'",
 			prepare: func() {
 				c.textDataService.EXPECT().Load(gomock.Any(), gomock.Any()).Times(0)
 			},
@@ -99,7 +99,7 @@ func (c *TextDataHandlerTestSuite) Test_GetLoadCredentials() {
 				CreatedBefore: "invalid date",
 			},
 			expectedCode:          codes.InvalidArgument,
-			expectedStatusMessage: "created before must be in format '2006-01-02'",
+			expectedStatusMessage: "date must be in format '2006-01-02'",
 			prepare: func() {
 				c.textDataService.EXPECT().Load(gomock.Any(), gomock.Any()).Times(0)
 			},

@@ -108,7 +108,7 @@ func (c *CredentialHandlerTestSuite) Test_PostSaveCredential() {
 				Metadata: "some data",
 			},
 			expectedCode:          codes.Internal,
-			expectedStatusMessage: "internal error while saving credential",
+			expectedStatusMessage: "internal error",
 			prepare: func() {
 				c.credentialService.EXPECT().Save(gomock.Any(), gomock.Any()).Times(1).Return(errors.New("internal"))
 			},

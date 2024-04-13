@@ -3,12 +3,13 @@ package repository
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/jackc/pgerrcode"
 	"github.com/jackc/pgx/v5/pgconn"
 
 	"github.com/msmkdenis/yap-infokeeper/internal/model"
-	apperr "github.com/msmkdenis/yap-infokeeper/pkg/apperror"
+	"github.com/msmkdenis/yap-infokeeper/pkg/caller"
 )
 
 func (r *PostgresCreditCardRepository) Insert(ctx context.Context, card model.CreditCard) error {
@@ -25,8 +26,12 @@ func (r *PostgresCreditCardRepository) Insert(ctx context.Context, card model.Cr
 	var e *pgconn.PgError
 	if errors.As(err, &e) && e.Code == pgerrcode.CheckViolation {
 		if e.ConstraintName == "unique_number" {
-			return apperr.ErrCardAlreadyExists
+			return fmt.Errorf("%s %w", caller.CodeLine(), model.ErrUserAlreadyExists)
 		}
+	}
+
+	if err != nil {
+		return fmt.Errorf("%s %w", caller.CodeLine(), err)
 	}
 
 	return err

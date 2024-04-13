@@ -4,6 +4,7 @@ import (
 	"context"
 	_ "embed"
 	"errors"
+	"fmt"
 
 	"github.com/jackc/pgerrcode"
 	"github.com/jackc/pgx/v5"
@@ -11,7 +12,7 @@ import (
 
 	"github.com/msmkdenis/yap-infokeeper/internal/model"
 	"github.com/msmkdenis/yap-infokeeper/internal/storage/db"
-	apperr "github.com/msmkdenis/yap-infokeeper/pkg/apperror"
+	"github.com/msmkdenis/yap-infokeeper/pkg/caller"
 )
 
 //go:embed queries/insert_user.sql
@@ -33,10 +34,14 @@ func (r *PostgresUserRepository) Insert(ctx context.Context, user model.User) er
 
 	var e *pgconn.PgError
 	if errors.As(err, &e) && e.Code == pgerrcode.UniqueViolation {
-		return apperr.NewValueError("User already exists", apperr.Caller(), err)
+		return fmt.Errorf("%s %w", caller.CodeLine(), model.ErrUserAlreadyExists)
 	}
 
-	return err
+	if err != nil {
+		return fmt.Errorf("%s %w", caller.CodeLine(), err)
+	}
+
+	return nil
 }
 
 func (r *PostgresUserRepository) SelectByLogin(ctx context.Context, login string) (*model.User, error) {
@@ -44,11 +49,9 @@ func (r *PostgresUserRepository) SelectByLogin(ctx context.Context, login string
 	err := r.postgresPool.DB.QueryRow(ctx, selectUser, login).Scan(&user.ID, &user.Login, &user.Password, &user.CreatedAt)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
-			err = apperr.ErrUserNotFound
-		} else {
-			err = apperr.NewValueError("query failed", apperr.Caller(), err)
+			return nil, fmt.Errorf("%s %w", caller.CodeLine(), model.ErrUserNotFound)
 		}
-		return nil, err
+		return nil, fmt.Errorf("%s %w", caller.CodeLine(), err)
 	}
 	return &user, nil
 }

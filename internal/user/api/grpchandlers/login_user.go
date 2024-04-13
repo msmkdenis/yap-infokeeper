@@ -3,6 +3,7 @@ package grpchandlers
 import (
 	"context"
 	"errors"
+	"fmt"
 	"log/slog"
 
 	"google.golang.org/grpc/codes"
@@ -10,7 +11,7 @@ import (
 
 	"github.com/msmkdenis/yap-infokeeper/internal/model"
 	pb "github.com/msmkdenis/yap-infokeeper/internal/proto/user"
-	apperr "github.com/msmkdenis/yap-infokeeper/pkg/apperror"
+	"github.com/msmkdenis/yap-infokeeper/pkg/caller"
 )
 
 func (h *UserRegister) PostLoginUser(ctx context.Context, in *pb.PostUserLoginRequest) (*pb.PostUserLoginResponse, error) {
@@ -25,24 +26,32 @@ func (h *UserRegister) PostLoginUser(ctx context.Context, in *pb.PostUserLoginRe
 	}
 
 	user, err := h.userService.Login(ctx, userLoginRequest)
-	if errors.Is(err, apperr.ErrInvalidPassword) {
-		slog.Info("Invalid password", slog.String("with login", in.Login))
+	if errors.Is(err, model.ErrInvalidPassword) {
+		slog.Info("Unable to login user: invalid password",
+			slog.String("user_login", in.Login),
+			slog.String("error", fmt.Errorf("%s %w", caller.CodeLine(), err).Error()))
 		return nil, status.Error(codes.Unauthenticated, "invalid password")
 	}
 
-	if errors.Is(err, apperr.ErrUserNotFound) {
-		slog.Info("User not found", slog.String("with login", in.Login))
+	if errors.Is(err, model.ErrUserNotFound) {
+		slog.Info("Unable to login user: user not found",
+			slog.String("user_login", in.Login),
+			slog.String("error", fmt.Errorf("%s %w", caller.CodeLine(), err).Error()))
 		return nil, status.Error(codes.Unauthenticated, "user not found")
 	}
 
 	if err != nil {
-		slog.Info("Unable to login user", slog.String("with login", in.Login))
+		slog.Info("Unable to login user: internal error",
+			slog.String("user_login", in.Login),
+			slog.String("error", fmt.Errorf("%s %w", caller.CodeLine(), err).Error()))
 		return nil, status.Error(codes.Internal, "internal error")
 	}
 
 	token, err := h.jwtManager.BuildJWTString(user.ID)
 	if err != nil {
-		slog.Error("failed to build token", slog.String("error", err.Error()))
+		slog.Info("Unable to login user: failed to build token",
+			slog.String("user_id", user.ID),
+			slog.String("error", fmt.Errorf("%s %w", caller.CodeLine(), err).Error()))
 		return nil, status.Error(codes.Internal, "internal error")
 	}
 

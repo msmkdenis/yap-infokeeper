@@ -6,7 +6,7 @@ import (
 
 	"github.com/msmkdenis/yap-infokeeper/internal/credential/specification"
 	"github.com/msmkdenis/yap-infokeeper/internal/model"
-	apperr "github.com/msmkdenis/yap-infokeeper/pkg/apperror"
+	"github.com/msmkdenis/yap-infokeeper/pkg/caller"
 )
 
 type CredentialRepository interface {
@@ -24,7 +24,7 @@ func NewCredentialService(repository CredentialRepository) *CredentialUseCase {
 
 func (u *CredentialUseCase) Save(ctx context.Context, credential model.Credential) error {
 	if err := u.repository.Insert(ctx, credential); err != nil {
-		return fmt.Errorf("%s %w", apperr.Caller(), err)
+		return fmt.Errorf("%s %w", caller.CodeLine(), err)
 	}
 
 	return nil
@@ -33,7 +33,7 @@ func (u *CredentialUseCase) Save(ctx context.Context, credential model.Credentia
 func (u *CredentialUseCase) Load(ctx context.Context, spec *specification.CredentialSpecification) ([]model.Credential, error) {
 	credentials, err := u.repository.SelectAll(ctx, spec)
 	if err != nil {
-		return nil, fmt.Errorf("%s %w", apperr.Caller(), err)
+		return nil, fmt.Errorf("%s %w", caller.CodeLine(), err)
 	}
 
 	return credentials, nil

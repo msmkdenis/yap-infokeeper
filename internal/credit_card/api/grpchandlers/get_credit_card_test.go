@@ -84,7 +84,7 @@ func (c *CreditCardHandlerTestSuite) Test_GetLoadCreditCard() {
 				CreatedAfter: "invalid date",
 			},
 			expectedCode:          codes.InvalidArgument,
-			expectedStatusMessage: "created after must be in format '2006-01-02'",
+			expectedStatusMessage: "date must be in format 2006-01-02",
 			prepare: func() {
 				c.creditCardService.EXPECT().Load(gomock.Any(), gomock.Any()).Times(0)
 			},
@@ -96,7 +96,7 @@ func (c *CreditCardHandlerTestSuite) Test_GetLoadCreditCard() {
 				CreatedBefore: "invalid date",
 			},
 			expectedCode:          codes.InvalidArgument,
-			expectedStatusMessage: "created before must be in format '2006-01-02'",
+			expectedStatusMessage: "date must be in format 2006-01-02",
 			prepare: func() {
 				c.creditCardService.EXPECT().Load(gomock.Any(), gomock.Any()).Times(0)
 			},
@@ -108,7 +108,7 @@ func (c *CreditCardHandlerTestSuite) Test_GetLoadCreditCard() {
 				ExpiresAfter: "invalid date",
 			},
 			expectedCode:          codes.InvalidArgument,
-			expectedStatusMessage: "expires after must be in format '2006-01-02'",
+			expectedStatusMessage: "date must be in format 2006-01-02",
 			prepare: func() {
 				c.creditCardService.EXPECT().Load(gomock.Any(), gomock.Any()).Times(0)
 			},
@@ -120,7 +120,7 @@ func (c *CreditCardHandlerTestSuite) Test_GetLoadCreditCard() {
 				ExpiresBefore: "invalid date",
 			},
 			expectedCode:          codes.InvalidArgument,
-			expectedStatusMessage: "expires before must be in format '2006-01-02'",
+			expectedStatusMessage: "date must be in format 2006-01-02",
 			prepare: func() {
 				c.creditCardService.EXPECT().Load(gomock.Any(), gomock.Any()).Times(0)
 			},

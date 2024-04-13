@@ -10,7 +10,7 @@ import (
 	"github.com/golang-migrate/migrate/v4/source/iofs"
 	"github.com/jackc/pgx/v5/pgxpool"
 
-	apperr "github.com/msmkdenis/yap-infokeeper/pkg/apperror"
+	"github.com/msmkdenis/yap-infokeeper/pkg/caller"
 )
 
 //go:embed migrations/*.sql
@@ -28,7 +28,7 @@ type Migrations struct {
 func NewMigrations(connection string) (*Migrations, error) {
 	dbConfig, err := pgxpool.ParseConfig(connection)
 	if err != nil {
-		return nil, apperr.NewValueError("Unable to parse connection string", apperr.Caller(), err)
+		return nil, fmt.Errorf("%s %w", caller.CodeLine(), err)
 	}
 	slog.Info("Successful connection string parsing", slog.String("database", dbConfig.ConnConfig.Database))
 
@@ -36,13 +36,13 @@ func NewMigrations(connection string) (*Migrations, error) {
 
 	driver, err := iofs.New(migrationsFS, "migrations")
 	if err != nil {
-		return nil, apperr.NewValueError("Unable to create iofs driver", apperr.Caller(), err)
+		return nil, fmt.Errorf("%s %w", caller.CodeLine(), err)
 	}
 	slog.Info("Successful connection", slog.String("database", dbConfig.ConnConfig.Database))
 
 	migrations, err := migrate.NewWithSourceInstance("iofs", driver, dbURL)
 	if err != nil {
-		return nil, apperr.NewValueError("Unable to create new migrations", apperr.Caller(), err)
+		return nil, fmt.Errorf("%s %w", caller.CodeLine(), err)
 	}
 
 	return &Migrations{migrations: migrations}, nil
@@ -52,7 +52,7 @@ func NewMigrations(connection string) (*Migrations, error) {
 func (m *Migrations) MigrateUp() error {
 	err := m.migrations.Up()
 	if err != nil && err.Error() != "no change" {
-		return apperr.NewValueError("Unable to up migrations", apperr.Caller(), err)
+		return fmt.Errorf("%s %w", caller.CodeLine(), err)
 	}
 	return nil
 }

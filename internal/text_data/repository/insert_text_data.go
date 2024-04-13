@@ -2,8 +2,10 @@ package repository
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/msmkdenis/yap-infokeeper/internal/model"
+	"github.com/msmkdenis/yap-infokeeper/pkg/caller"
 )
 
 func (r *PostgresTextDataRepository) Insert(ctx context.Context, textData model.TextData) error {
@@ -12,6 +14,9 @@ func (r *PostgresTextDataRepository) Insert(ctx context.Context, textData model.
 		textData.OwnerID,
 		textData.Data,
 		textData.Metadata)
+	if err != nil {
+		return fmt.Errorf("%s %w", caller.CodeLine(), err)
+	}
 
-	return err
+	return nil
 }

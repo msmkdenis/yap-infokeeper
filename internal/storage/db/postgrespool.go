@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"log/slog"
 
-	apperr "github.com/msmkdenis/yap-infokeeper/pkg/apperror"
-
 	"github.com/jackc/pgx/v5/pgxpool"
+
+	"github.com/msmkdenis/yap-infokeeper/pkg/caller"
 )
 
 type PostgresPool struct {
@@ -17,13 +17,13 @@ type PostgresPool struct {
 func NewPostgresPool(ctx context.Context, connection string) (*PostgresPool, error) {
 	dbPool, err := pgxpool.New(ctx, connection)
 	if err != nil {
-		return nil, apperr.NewValueError(fmt.Sprintf("Unable to connect to database with connection %s", connection), apperr.Caller(), err)
+		return nil, fmt.Errorf("%s %w", caller.CodeLine(), err)
 	}
 	slog.Info("Successful connection", slog.String("database", dbPool.Config().ConnConfig.Database))
 
 	err = dbPool.Ping(ctx)
 	if err != nil {
-		return nil, apperr.NewValueError("Unable to ping database", apperr.Caller(), err)
+		return nil, fmt.Errorf("%s %w", caller.CodeLine(), err)
 	}
 	slog.Info("Successful ping", slog.String("database", dbPool.Config().ConnConfig.Database))
 

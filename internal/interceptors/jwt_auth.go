@@ -2,6 +2,7 @@ package interceptors
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 
 	"google.golang.org/grpc"
@@ -9,6 +10,7 @@ import (
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 
+	"github.com/msmkdenis/yap-infokeeper/pkg/caller"
 	"github.com/msmkdenis/yap-infokeeper/pkg/jwtgen"
 )
 
@@ -40,18 +42,22 @@ func (j *JWTAuth) GRPCJWTAuth(ctx context.Context, req interface{}, info *grpc.U
 
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
+		slog.Info("Authentication failed: missing metadata",
+			slog.String("caller", caller.CodeLine()))
 		return nil, status.Errorf(codes.InvalidArgument, "missing metadata")
 	}
 
 	c := md.Get(j.jwtManager.TokenName)
 	if len(c) < 1 {
-		slog.Info("authentification failed", slog.String("error", "no token found"))
-		return nil, status.Errorf(codes.Unauthenticated, "no token found")
+		slog.Info("Authentication failed: token not found",
+			slog.String("caller", caller.CodeLine()))
+		return nil, status.Errorf(codes.Unauthenticated, "token not found")
 	}
 
 	userID, err := j.jwtManager.GetUserID(c[0])
 	if err != nil {
-		slog.Info("authentification failed", slog.String("error", "authentification by UserID failed"))
+		slog.Info("Authentication failed: unable to get userID from token",
+			slog.String("error", fmt.Errorf("%s %w", caller.CodeLine(), err).Error()))
 		return nil, status.Errorf(codes.Unauthenticated, "authentification by UserID failed")
 	}
 

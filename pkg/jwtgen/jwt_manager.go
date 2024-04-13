@@ -1,14 +1,14 @@
 package jwtgen
 
 import (
-	"errors"
 	"fmt"
 	"log/slog"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
 
-	apperr "github.com/msmkdenis/yap-infokeeper/pkg/apperror"
+	"github.com/msmkdenis/yap-infokeeper/internal/model"
+	"github.com/msmkdenis/yap-infokeeper/pkg/caller"
 )
 
 type JWTManager struct {
@@ -43,7 +43,7 @@ func (j *JWTManager) BuildJWTString(userID string) (string, error) {
 
 	tokenString, err := token.SignedString([]byte(j.secretKey))
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("%s %w", caller.CodeLine(), err)
 	}
 
 	return tokenString, nil
@@ -55,17 +55,17 @@ func (j *JWTManager) GetUserID(tokenString string) (string, error) {
 	token, err := jwt.ParseWithClaims(tokenString, jwtClaims,
 		func(t *jwt.Token) (interface{}, error) {
 			if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
-				return nil, apperr.NewValueError(fmt.Sprintf("unexpected signing method: %v", t.Header["alg"]), apperr.Caller(), errors.New("unexpected signing method"))
+				return nil, fmt.Errorf("%s %w", caller.CodeLine(), model.ErrUnexpectedTokenSignMethod)
 			}
 			return []byte(j.secretKey), nil
 		})
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("%s %w", caller.CodeLine(), err)
 	}
 
 	if !token.Valid {
-		slog.Warn("token is not valid", slog.String("error", err.Error()))
-		return "", apperr.NewValueError("token is not valid", apperr.Caller(), errors.New("token is not valid"))
+		slog.Warn("token is not valid", slog.String("token", tokenString))
+		return "", fmt.Errorf("%s %w", caller.CodeLine(), model.ErrInvalidToken)
 	}
 
 	return jwtClaims.UserID, nil

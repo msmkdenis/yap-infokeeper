@@ -2,7 +2,10 @@ package grpchandlers
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
+
+	"github.com/msmkdenis/yap-infokeeper/pkg/caller"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -15,19 +18,24 @@ import (
 func (h *CreditCard) GetLoadCreditCard(ctx context.Context, in *pb.GetCreditCardRequest) (*pb.GetCreditCardResponse, error) {
 	userID, ok := ctx.Value(interceptors.UserIDContextKey("userID")).(string)
 	if !ok {
-		slog.Error("Internal server error", slog.String("error", "unable to get userID from context"))
+		slog.Error("Unable to load credit card: failed to get user id from context",
+			slog.String("caller", caller.CodeLine()))
 		return nil, status.Error(codes.Internal, "internal error")
 	}
 
 	spec, err := specification.NewCreditCardSpecification(userID, in)
 	if err != nil {
-		slog.Error("invalid text data request", slog.String("error", err.Error()))
-		return nil, status.Error(codes.InvalidArgument, err.Error())
+		slog.Error("Unable to load credit card: invalid credit card request",
+			slog.String("user_d", userID),
+			slog.String("error", fmt.Errorf("%s %w", caller.CodeLine(), err).Error()))
+		return nil, status.Error(codes.InvalidArgument, "date must be in format 2006-01-02")
 	}
 
 	creditCards, err := h.creditCardService.Load(ctx, spec)
 	if err != nil {
-		slog.Error("failed to load credit cards", slog.String("error", err.Error()))
+		slog.Error("Unable to load credit card: internal error",
+			slog.String("user_d", userID),
+			slog.String("error", fmt.Errorf("%s %w", caller.CodeLine(), err).Error()))
 		return nil, status.Error(codes.Internal, "internal error")
 	}
 

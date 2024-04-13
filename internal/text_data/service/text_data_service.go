@@ -6,7 +6,7 @@ import (
 
 	"github.com/msmkdenis/yap-infokeeper/internal/model"
 	"github.com/msmkdenis/yap-infokeeper/internal/text_data/specification"
-	apperr "github.com/msmkdenis/yap-infokeeper/pkg/apperror"
+	"github.com/msmkdenis/yap-infokeeper/pkg/caller"
 )
 
 type TextDataRepository interface {
@@ -24,7 +24,7 @@ func NewTextDataService(repository TextDataRepository) *TextDataUseCase {
 
 func (u *TextDataUseCase) Save(ctx context.Context, textData model.TextData) error {
 	if err := u.repository.Insert(ctx, textData); err != nil {
-		return fmt.Errorf("%s %w", apperr.Caller(), err)
+		return fmt.Errorf("%s %w", caller.CodeLine(), err)
 	}
 
 	return nil
@@ -33,7 +33,7 @@ func (u *TextDataUseCase) Save(ctx context.Context, textData model.TextData) err
 func (u *TextDataUseCase) Load(ctx context.Context, spec *specification.TextDataSpecification) ([]model.TextData, error) {
 	textData, err := u.repository.SelectAll(ctx, spec)
 	if err != nil {
-		return nil, fmt.Errorf("%s %w", apperr.Caller(), err)
+		return nil, fmt.Errorf("%s %w", caller.CodeLine(), err)
 	}
 
 	return textData, nil

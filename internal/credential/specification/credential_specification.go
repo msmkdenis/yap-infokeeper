@@ -1,9 +1,10 @@
 package specification
 
 import (
-	"errors"
 	"fmt"
 	"time"
+
+	"github.com/msmkdenis/yap-infokeeper/pkg/caller"
 
 	pb "github.com/msmkdenis/yap-infokeeper/internal/proto/credential"
 )
@@ -28,7 +29,7 @@ func NewCredentialSpecification(ownerID string, in *pb.GetCredentialRequest) (*C
 	if in.CreatedAfter != "" {
 		after, err := time.Parse("2006-01-02", in.CreatedAfter)
 		if err != nil {
-			return nil, errors.New("created after must be in format '2006-01-02'")
+			return nil, fmt.Errorf("%s %w", caller.CodeLine(), err)
 		}
 		spec.CreatedAfter = after
 	}
@@ -36,7 +37,7 @@ func NewCredentialSpecification(ownerID string, in *pb.GetCredentialRequest) (*C
 	if in.CreatedBefore != "" {
 		before, err := time.Parse("2006-01-02", in.CreatedBefore)
 		if err != nil {
-			return nil, errors.New("created before must be in format '2006-01-02'")
+			return nil, fmt.Errorf("%s %w", caller.CodeLine(), err)
 		}
 		spec.CreatedBefore = before
 	}

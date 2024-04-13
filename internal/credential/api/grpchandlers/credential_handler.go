@@ -2,6 +2,7 @@ package grpchandlers
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 	"strings"
 
@@ -12,6 +13,7 @@ import (
 	"github.com/msmkdenis/yap-infokeeper/internal/credential/specification"
 	"github.com/msmkdenis/yap-infokeeper/internal/model"
 	pb "github.com/msmkdenis/yap-infokeeper/internal/proto/credential"
+	"github.com/msmkdenis/yap-infokeeper/pkg/caller"
 )
 
 type CredentialService interface {
@@ -50,9 +52,9 @@ func processValidationError(report map[string][]string) error {
 	br.FieldViolations = append(br.FieldViolations, details...)
 	st, err := st.WithDetails(br)
 	if err != nil {
-		slog.Error("failed to set details", slog.String("error", err.Error()))
+		slog.Error("Internal error: failed to set details",
+			slog.String("error", fmt.Errorf("%s %w", caller.CodeLine(), err).Error()))
 		return status.Error(codes.Internal, "internal error")
 	}
-	slog.Info("validation error", slog.String("error", st.Err().Error()))
 	return st.Err()
 }

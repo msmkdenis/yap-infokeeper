@@ -10,6 +10,7 @@ import (
 	"github.com/msmkdenis/yap-infokeeper/internal/credential/specification"
 	"github.com/msmkdenis/yap-infokeeper/internal/model"
 	"github.com/msmkdenis/yap-infokeeper/internal/storage/db"
+	"github.com/msmkdenis/yap-infokeeper/pkg/caller"
 )
 
 //go:embed queries/insert_credential.sql
@@ -33,6 +34,9 @@ func (r *PostgresCredentialsRepository) Insert(ctx context.Context, credential m
 		credential.Login,
 		credential.Password,
 		credential.Metadata)
+	if err != nil {
+		return fmt.Errorf("%s %w", caller.CodeLine(), err)
+	}
 
 	return err
 }
@@ -43,12 +47,12 @@ func (r *PostgresCredentialsRepository) SelectAll(ctx context.Context, spec *spe
 
 	queryRows, err := r.postgresPool.DB.Query(ctx, query, args...)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("%s %w", caller.CodeLine(), err)
 	}
 
 	credentials, err := pgx.CollectRows(queryRows, pgx.RowToStructByPos[model.Credential])
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("%s %w", caller.CodeLine(), err)
 	}
 
 	return credentials, nil

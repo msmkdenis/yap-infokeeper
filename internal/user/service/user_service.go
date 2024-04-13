@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/msmkdenis/yap-infokeeper/internal/model"
-	apperr "github.com/msmkdenis/yap-infokeeper/pkg/apperror"
+	"github.com/msmkdenis/yap-infokeeper/pkg/caller"
 )
 
 type UserRepository interface {
@@ -24,7 +24,7 @@ func NewUserService(repository UserRepository) *UserUseCase {
 
 func (u *UserUseCase) Register(ctx context.Context, user model.User) error {
 	if err := u.repository.Insert(ctx, user); err != nil {
-		return fmt.Errorf("%s %w", apperr.Caller(), err)
+		return fmt.Errorf("%s %w", caller.CodeLine(), err)
 	}
 
 	return nil
@@ -33,11 +33,11 @@ func (u *UserUseCase) Register(ctx context.Context, user model.User) error {
 func (u *UserUseCase) Login(ctx context.Context, userLoginRequest model.UserLoginRequest) (*model.User, error) {
 	user, err := u.repository.SelectByLogin(ctx, userLoginRequest.Login)
 	if err != nil {
-		return nil, fmt.Errorf("%s %w", apperr.Caller(), err)
+		return nil, fmt.Errorf("%s %w", caller.CodeLine(), err)
 	}
 
 	if !bytes.Equal(userLoginRequest.Password, user.Password) {
-		return nil, apperr.ErrInvalidPassword
+		return nil, fmt.Errorf("%s %w", caller.CodeLine(), model.ErrInvalidPassword)
 	}
 
 	return user, nil

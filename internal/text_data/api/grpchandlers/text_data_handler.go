@@ -12,6 +12,7 @@ import (
 	"github.com/msmkdenis/yap-infokeeper/internal/model"
 	pb "github.com/msmkdenis/yap-infokeeper/internal/proto/text_data"
 	"github.com/msmkdenis/yap-infokeeper/internal/text_data/specification"
+	"github.com/msmkdenis/yap-infokeeper/pkg/caller"
 )
 
 type TextDataService interface {
@@ -50,9 +51,9 @@ func processValidationError(report map[string][]string) error {
 	br.FieldViolations = append(br.FieldViolations, details...)
 	st, err := st.WithDetails(br)
 	if err != nil {
-		slog.Error("failed to set details", slog.String("error", err.Error()))
+		slog.Error("Internal error: failed to set details",
+			slog.String("caller", caller.CodeLine()), slog.String("error", err.Error()))
 		return status.Error(codes.Internal, "internal error")
 	}
-	slog.Info("validation error", slog.String("error", st.Err().Error()))
 	return st.Err()
 }

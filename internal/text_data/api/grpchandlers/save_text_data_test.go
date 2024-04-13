@@ -87,7 +87,7 @@ func (c *TextDataHandlerTestSuite) Test_PostSaveTextData() {
 				Metadata: "some metadata",
 			},
 			expectedCode:          codes.Internal,
-			expectedStatusMessage: "internal error while saving text data",
+			expectedStatusMessage: "internal error",
 			prepare: func() {
 				c.textDataService.EXPECT().Save(gomock.Any(), gomock.Any()).Times(1).Return(errors.New("some error"))
 			},

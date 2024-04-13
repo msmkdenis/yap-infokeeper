@@ -17,7 +17,6 @@ import (
 
 	"github.com/msmkdenis/yap-infokeeper/internal/model"
 	"github.com/msmkdenis/yap-infokeeper/internal/proto/user"
-	apperr "github.com/msmkdenis/yap-infokeeper/pkg/apperror"
 )
 
 func (u *UserHandlerTestSuite) Test_PostLoginUser() {
@@ -74,7 +73,7 @@ func (u *UserHandlerTestSuite) Test_PostLoginUser() {
 			expectedViolationField:       "",
 			expectedViolationDescription: "",
 			prepare: func() {
-				u.userService.EXPECT().Login(gomock.Any(), gomock.Any()).Times(1).Return(nil, apperr.ErrInvalidPassword)
+				u.userService.EXPECT().Login(gomock.Any(), gomock.Any()).Times(1).Return(nil, model.ErrInvalidPassword)
 			},
 		},
 		{
@@ -88,7 +87,7 @@ func (u *UserHandlerTestSuite) Test_PostLoginUser() {
 			expectedViolationField:       "",
 			expectedViolationDescription: "",
 			prepare: func() {
-				u.userService.EXPECT().Login(gomock.Any(), gomock.Any()).Times(1).Return(nil, apperr.ErrUserNotFound)
+				u.userService.EXPECT().Login(gomock.Any(), gomock.Any()).Times(1).Return(nil, model.ErrUserNotFound)
 			},
 		},
 		{

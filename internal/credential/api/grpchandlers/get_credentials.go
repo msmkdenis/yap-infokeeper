@@ -2,6 +2,7 @@ package grpchandlers
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 
 	"google.golang.org/grpc/codes"
@@ -10,24 +11,30 @@ import (
 	"github.com/msmkdenis/yap-infokeeper/internal/credential/specification"
 	"github.com/msmkdenis/yap-infokeeper/internal/interceptors"
 	pb "github.com/msmkdenis/yap-infokeeper/internal/proto/credential"
+	"github.com/msmkdenis/yap-infokeeper/pkg/caller"
 )
 
 func (h *Credential) GetLoadCredentials(ctx context.Context, in *pb.GetCredentialRequest) (*pb.GetCredentialResponse, error) {
 	userID, ok := ctx.Value(interceptors.UserIDContextKey("userID")).(string)
 	if !ok {
-		slog.Error("Internal server error", slog.String("error", "unable to get userID from context"))
+		slog.Error("Unable to load credential: failed to get user id from context",
+			slog.String("caller", caller.CodeLine()))
 		return nil, status.Error(codes.Internal, "internal error")
 	}
 
 	credentialSpec, err := specification.NewCredentialSpecification(userID, in)
 	if err != nil {
-		slog.Error("invalid credential request", slog.String("error", err.Error()))
-		return nil, status.Error(codes.InvalidArgument, err.Error())
+		slog.Error("Unable to load credential: invalid credential request",
+			slog.String("user_d", userID),
+			slog.String("error", fmt.Errorf("%s %w", caller.CodeLine(), err).Error()))
+		return nil, status.Error(codes.InvalidArgument, "date must be in format 2006-01-02")
 	}
 
 	creds, err := h.credentialService.Load(ctx, credentialSpec)
 	if err != nil {
-		slog.Error("failed to load credentials", slog.String("error", err.Error()))
+		slog.Error("Unable to load credential: internal error",
+			slog.String("user_d", userID),
+			slog.String("error", fmt.Errorf("%s %w", caller.CodeLine(), err).Error()))
 		return nil, status.Error(codes.Internal, "internal error")
 	}
 

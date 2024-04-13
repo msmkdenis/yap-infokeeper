@@ -1,11 +1,11 @@
 package specification
 
 import (
-	"errors"
 	"fmt"
 	"time"
 
 	pb "github.com/msmkdenis/yap-infokeeper/internal/proto/text_data"
+	"github.com/msmkdenis/yap-infokeeper/pkg/caller"
 )
 
 type TextDataSpecification struct {
@@ -26,7 +26,7 @@ func NewTextDataSpecification(ownerID string, in *pb.GetTextDataRequest) (*TextD
 	if in.CreatedAfter != "" {
 		after, err := time.Parse("2006-01-02", in.CreatedAfter)
 		if err != nil {
-			return nil, errors.New("created after must be in format '2006-01-02'")
+			return nil, fmt.Errorf("%s %w", caller.CodeLine(), err)
 		}
 		spec.CreatedAfter = after
 	}
@@ -34,7 +34,7 @@ func NewTextDataSpecification(ownerID string, in *pb.GetTextDataRequest) (*TextD
 	if in.CreatedBefore != "" {
 		before, err := time.Parse("2006-01-02", in.CreatedBefore)
 		if err != nil {
-			return nil, errors.New("created before must be in format '2006-01-02'")
+			return nil, fmt.Errorf("%s %w", caller.CodeLine(), err)
 		}
 		spec.CreatedBefore = before
 	}
